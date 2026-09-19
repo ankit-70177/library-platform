@@ -1,11 +1,13 @@
-import './App.css'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Home from './pages/Home'
 
 function App() {
   return (
-    <div>
-      <h1>Library Platform</h1>
-      <p>Discover libraries. Compare plans. Find the right place to study.</p>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
