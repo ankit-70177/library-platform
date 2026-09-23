@@ -1,3 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&display=swap');
+
+:root {
+  --navy: #1B2A4A;
+  --navy-dark: #142038;
+
+  --ivory: #FAF8F3;
+
+  --sage: #4F7965;
+  --sage-dark: #3E6252;
+
+  --amber: #E8A33D;
+
+  --sand: #EFE6D8;
+
+  --text: #2B2B2B;
+  --muted: #666666;
+
+  --border: rgba(27, 42, 74, 0.14);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -9,7 +30,18 @@ body {
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Work Sans', sans-serif;
+
+  background: var(--ivory);
+
+  color: var(--text);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: 'Fraunces', serif;
 }
 
 button,
@@ -17,4 +49,8 @@ input,
 textarea,
 select {
   font: inherit;
+}
+
+a {
+  color: inherit;
 }
