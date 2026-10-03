@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import LibraryCard from '../components/LibraryCard'
+import LibraryCard from '../components/library/LibraryCard'
 import './Libraries.css'
 
 const libraries = [
