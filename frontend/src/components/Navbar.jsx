@@ -42,16 +42,16 @@ function Navbar() {
         <div className={menuOpen ? 'nav-menu open' : 'nav-menu'}>
           <ul className="nav-links">
             <li>
-              <a href="#libraries" onClick={closeMenu}>Libraries</a>
+              <a href="/libraries" onClick={closeMenu}>Libraries</a>
             </li>
             <li>
-              <a href="#how-it-works" onClick={closeMenu}>How it works</a>
+              <a href="/how-it-works" onClick={closeMenu}>How it works</a>
             </li>
             <li>
-              <a href="#about" onClick={closeMenu}>About</a>
+              <a href="/about" onClick={closeMenu}>About</a>
             </li>
             <li>
-              <a href="#owners" onClick={closeMenu}>For owners</a>
+              <a href="/owners" onClick={closeMenu}>For owners</a>
             </li>
           </ul>
 
