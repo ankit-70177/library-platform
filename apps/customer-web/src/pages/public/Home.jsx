@@ -57,6 +57,10 @@ function Home() {
       </section>
 
       <section className="texture-ribbon" aria-label="Explore Kitaab">
+        <div className="ribbon-heading">
+          <span className="eyebrow">Explore Kitaab</span>
+          <h2>Find, Focus &amp; Grow</h2>
+        </div>
         <a className="ribbon-card ribbon-lime texture" href="#locations"><span className="ribbon-icon" aria-hidden="true">⌕</span><span className="ribbon-label">Find a place</span><strong>Libraries near you</strong><span className="ribbon-arrow" aria-hidden="true">↗</span></a>
         <a className="ribbon-card ribbon-blue texture" href="#events"><span className="ribbon-icon" aria-hidden="true">✳</span><span className="ribbon-label">Make a little time</span><strong>Study together</strong><span className="ribbon-arrow" aria-hidden="true">↗</span></a>
         <a className="ribbon-card ribbon-coral texture" href="#about"><span className="ribbon-icon" aria-hidden="true">✺</span><span className="ribbon-label">A note from us</span><strong>About Kitaab</strong><span className="ribbon-arrow" aria-hidden="true">↗</span></a>
