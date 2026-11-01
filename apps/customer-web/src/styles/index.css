@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap');
+
+:root {
+  font-family: 'Lora', Georgia, serif;
+  color: #17211d;
+  background: #f6f1e7;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  --paper: #f6f1e7;
+  --ink: #17211d;
+  --muted: #64706a;
+  --home-paper: #f6f1e7;
+  --home-ink: #17211d;
+  --home-muted: #68726b;
+  --home-rust: #b94d35;
+  --marigold: #f3c944;
+  --rust: #bb4b32;
+  --serif: 'Lora', Georgia, serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 20px; }
+body { min-width: 320px; min-height: 100vh; margin: 0; }
+button, input, select { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--rust); outline-offset: 3px; }
