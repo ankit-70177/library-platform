@@ -1,70 +1,51 @@
-import { useState } from 'react';
-import './Navbar.css';
+import { useState } from 'react'
+import './Navbar.css'
 
-const ownerAppUrl = import.meta.env.VITE_OWNER_APP_URL || 'http://localhost:5174';
+const ownerAppUrl = import.meta.env.VITE_OWNER_APP_URL || 'http://localhost:5174'
 
 function Navbar() {
-  // true = mobile menu is open, false = closed
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  // Open or close the menu when the hamburger button is clicked
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
-
-  // Close the menu after a link is clicked
-  const closeMenu = () => {
-    setMenuOpen(false);
-  };
+  const [menuOpen, setMenuOpen] = useState(false)
+  const closeMenu = () => setMenuOpen(false)
 
   return (
-    <header className="navbar">
-      <nav className="navbar-inner">
-        {/* Logo + name */}
-        <a className="brand" href="/">
-          <svg className="brand-mark" viewBox="0 0 32 32" width="32" height="32">
-            <rect width="32" height="32" rx="8" fill="#1B2A4A" />
-            <path d="M11 7h10v18l-5-4.2L11 25z" fill="#E8A33D" />
+    <header className="site-header">
+      <div className="header-topline">
+        <span>Find your quiet corner.</span>
+        <a href={ownerAppUrl}>For library owners <span aria-hidden="true">↗</span></a>
+      </div>
+      <nav className="navbar" aria-label="Main navigation">
+        <a className="brand" href="/" aria-label="Kitaab home">
+          <svg className="brand-mark" viewBox="0 0 44 44" role="img" aria-label="">
+            <path d="M5 10.5c6.2-2 11.9-1.2 17 2.4v23c-5.1-3.6-10.8-4.4-17-2.4z" fill="currentColor" />
+            <path d="M39 10.5c-6.2-2-11.9-1.2-17 2.4v23c5.1-3.6 10.8-4.4 17-2.4z" fill="currentColor" />
+            <path d="M22 13v23" stroke="#f6f1e7" strokeWidth="1.5" />
+            <path d="M10 17c3 .1 5.3.7 7 1.8M10 22c3 .1 5.3.7 7 1.8M34 17c-3 .1-5.3.7-7 1.8M34 22c-3 .1-5.3.7-7 1.8" fill="none" stroke="#f6f1e7" strokeWidth="1" />
           </svg>
-          <span>Kitaab</span>
+          <span className="brand-word">Kitaab</span>
+          <span className="brand-caption">A better place to study</span>
         </a>
 
-        {/* Hamburger button (only visible on small screens) */}
         <button
-          className={menuOpen ? 'nav-toggle open' : 'nav-toggle'}
-          onClick={toggleMenu}
-          aria-label="Toggle menu"
+          className={`menu-toggle ${menuOpen ? 'is-open' : ''}`}
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-expanded={menuOpen}
+          aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
         >
-          <span></span>
-          <span></span>
-          <span></span>
+          <span /><span />
         </button>
 
-        {/* Links and buttons. The "open" class shows it on mobile */}
-        <div className={menuOpen ? 'nav-menu open' : 'nav-menu'}>
+        <div className={`nav-content ${menuOpen ? 'is-open' : ''}`}>
           <ul className="nav-links">
-            <li>
-              <a href="#libraries" onClick={closeMenu}>Libraries</a>
-            </li>
-            <li>
-              <a href="#how-it-works" onClick={closeMenu}>How it works</a>
-            </li>
-            <li>
-              <a href="/about" onClick={closeMenu}>About</a>
-            </li>
-            <li>
-              <a href={ownerAppUrl} onClick={closeMenu}>Owner Login</a>
-            </li>
+            <li><a href="/#home" onClick={closeMenu}>Home</a></li>
+            <li><a href="/locations" onClick={closeMenu}>Locations</a></li>
+            <li><a href="/events" onClick={closeMenu}>Events</a></li>
+            <li><a href="/about" onClick={closeMenu}>About</a></li>
           </ul>
-
-          <div className="nav-actions">
-            <a className="nav-login" href="/login">Log in</a>
-            <a className="nav-signup" href="/register">Sign up</a>
-          </div>
+          <a className="owner-login" href={ownerAppUrl}>Owner Login <span aria-hidden="true">↗</span></a>
         </div>
       </nav>
     </header>
-  );
+  )
 }
 
-export default Navbar;
+export default Navbar

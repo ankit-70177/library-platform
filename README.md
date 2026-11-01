@@ -54,7 +54,7 @@ The customer application is public-facing and serves as the main discovery entry
 - **Memberships and subscriptions:** view plans, purchase a membership, view active and past subscriptions, see start and expiry dates, renew, review payment history, and receive upcoming-expiry reminders.
 - **Reviews:** rate a library, write and view reviews, and report inappropriate content.
 
-The existing customer prototype contains a location search input, sample library cards, and a responsive navigation/footer. The sample data and displayed availability are static prototype content; search is not connected to the API and availability is not live.
+The customer app presents Kitaab as the location-first entry point with Home, Locations, Events, and About pages, a responsive navigation/footer, an editorial photo hero, and textured discovery sections. The location search and listing cards are a local sample prototype. The sample data and displayed availability are static prototype content; search is not connected to the API and availability is not live.
 
 ## Library-owner application
 
@@ -302,7 +302,7 @@ Never commit real `.env` files, credentials, or secrets. `.env.example` files co
 
 ## Current implementation status
 
-- **Implemented:** existing customer-facing prototype relocated under `apps/customer-web/`; its home page, sample library cards, navigation, footer, and styles remain. Public routes include home, libraries, and about. A separate owner React/Vite app shell exists. The Express server exposes `GET /api/health`.
+- **Implemented:** existing customer-facing prototype relocated under `apps/customer-web/`; its home page, sample library cards, navigation, footer, and styles remain. The Home, Locations, Events, and About pages provide the initial branded public experience. Public routes include Home, Locations, Events, and About. A separate owner React/Vite app shell exists. The Express server exposes `GET /api/health`.
 - **Structure prepared:** independent customer and owner applications, feature-oriented frontend folders, backend module folders, environment examples, and per-package scripts/lockfiles.
 - **Planned, not implemented:** real location selection/search, API-backed listings, authentication and authorization, owner onboarding and dashboard, platform approval, PostgreSQL integration, seat management, memberships, payment processing, reviews, notifications, analytics, maps, image storage, and admin tooling.
 

@@ -1,28 +1,16 @@
-import { Link } from 'react-router-dom'
 import './Footer.css'
 
 function Footer() {
   return (
-    <footer className="footer">
+    <footer className="site-footer">
       <div className="footer-main">
-        <div>
-          <Link to="/" className="footer-logo">
-            Library Platform
-          </Link>
-          <p>Find the right place to read, learn and grow.</p>
-        </div>
-
-        <div className="footer-links">
-          <Link to="/">Home</Link>
-          <Link to="/libraries">Libraries</Link>
-          <Link to="/about">About</Link>
-        </div>
+        <a className="footer-brand" href="/#home"><span className="footer-mark">K</span><span>Kitaab<small>A better place to study</small></span></a>
+        <p>Find your focus.<br />Find your people.<br />Find your place.</p>
+        <nav className="footer-nav" aria-label="Footer navigation">
+          <a href="/#home">Home</a><a href="/locations">Locations</a><a href="/events">Events</a><a href="/about">About</a>
+        </nav>
       </div>
-
-      <div className="footer-bottom">
-        <span>© 2026 Library Platform</span>
-        <span>Made for better study spaces.</span>
-      </div>
+      <div className="footer-bottom"><span>© 2026 Kitaab</span><span>Made for the study hours.</span><a href={import.meta.env.VITE_OWNER_APP_URL || 'http://localhost:5174'}>For library owners ↗</a></div>
     </footer>
   )
 }
