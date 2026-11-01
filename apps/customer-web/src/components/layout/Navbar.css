@@ -12,7 +12,7 @@
 .navbar { max-width: 1480px; min-height: 112px; margin: 0 auto; padding: 18px clamp(20px, 4.7vw, 74px) 23px; display: flex; align-items: center; justify-content: space-between; gap: 38px; }
 .brand { display: flex; align-items: center; gap: 13px; color: #131313; text-decoration: none; flex: 0 0 auto; }
 .brand-mark { width: 52px; height: 52px; }
-.brand-word { font: 700 25px/1 'DM Sans', sans-serif; letter-spacing: .18em; }
+.brand-word { font: 700 25px/1 'Lora', Georgia, serif; letter-spacing: .18em; }
 .nav-content { display: flex; align-items: center; gap: clamp(16px, 2.2vw, 34px); }
 .nav-links { list-style: none; display: flex; align-items: center; gap: clamp(17px, 2.4vw, 38px); margin: 0; padding: 0; }
 .nav-links a { display: inline-flex; align-items: center; gap: 7px; color: #171717; text-decoration: none; font-size: 15px; font-weight: 700; }
