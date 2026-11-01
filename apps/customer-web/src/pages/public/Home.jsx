@@ -22,27 +22,38 @@ function Home() {
     <main className="home" id="home">
       <section className="hero-banner" style={{ '--hero-image': `url(${heroImage})` }} aria-label="Welcome to Kitaab">
         <div className="hero-content">
-          <p className="eyebrow light-eyebrow">Your city, a little quieter</p>
-          <h1>A good place<br />to get somewhere.</h1>
-          <p className="hero-description">Find your next study space. Discover the reading rooms, routines, and people that make focus feel natural.</p>
-          <a className="button button-yellow" href="#locations">Find your library <span aria-hidden="true">↗</span></a>
+          <p className="eyebrow light-eyebrow">WELCOME TO THE</p>
+          <h1>Kitaab</h1>
+          <p className="hero-description">A good place to find your focus.</p>
         </div>
-        <div className="hero-note"><span className="note-dot" /> SONIPAT, HARYANA <span className="note-divider">/</span> MADE FOR THE STUDY HOURS
-        </div>
+        <div className="hero-note"><span className="note-dot" /> SONIPAT, HARYANA <span className="note-divider">/</span> YOUR STUDY SPACE, FOUND</div>
       </section>
 
-      <section className="quick-search" aria-labelledby="search-title">
-        <div className="search-copy">
-          <span className="eyebrow">Start close to home</span>
-          <h2 id="search-title">What are you looking for?</h2>
+      <section className="hero-search-stage" aria-labelledby="search-title">
+        <div className="hero-search-panel">
+          <div className="search-panel-main">
+            <span className="eyebrow">Start close to home</span>
+            <h2 id="search-title">What can we help you find?</h2>
+            <form className="search-form" onSubmit={handleSearch}>
+              <label className="sr-only" htmlFor="library-search">Search by city, area, or library</label>
+              <span className="search-pin" aria-hidden="true">⌕</span>
+              <input id="library-search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Type a city, area, or library name..." />
+              <button type="submit" aria-label="Search libraries">Search <span aria-hidden="true">⌕</span></button>
+            </form>
+            <div className="search-panel-actions">
+              <button type="button" onClick={handleSearch}><span aria-hidden="true">▤</span> Search Libraries</button>
+              <a href="/locations"><span aria-hidden="true">⌖</span> Browse Locations</a>
+            </div>
+          </div>
+          <aside className="search-panel-links" aria-label="Quick links">
+            <a href="/login"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="4" /><path d="M4 21a8 8 0 0 1 16 0z" /></svg> My Account</a>
+            <a href="/register"><span aria-hidden="true">▣</span> Memberships</a>
+            <a href={import.meta.env.VITE_OWNER_APP_URL || 'http://localhost:5174'}><span aria-hidden="true">⌂</span> Owner Login</a>
+            <a href="/about"><span aria-hidden="true">?</span> Get Help</a>
+            <a href="/events"><span aria-hidden="true">✳</span> Community Events</a>
+          </aside>
         </div>
-        <form className="search-form" onSubmit={handleSearch}>
-          <label className="sr-only" htmlFor="library-search">Search by city, area, or library</label>
-          <span className="search-pin" aria-hidden="true">⌖</span>
-          <input id="library-search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="City, locality, or library name" />
-          <button type="submit" aria-label="Search libraries">Search <span aria-hidden="true">↗</span></button>
-        </form>
-        <div className="search-hint"><span>TRY</span><button type="button" onClick={() => { setSearch('Sonipat'); setAppliedSearch('Sonipat'); document.getElementById('locations')?.scrollIntoView({ behavior: 'smooth' }) }}>Sonipat</button><i /> <span>NEAR YOU</span></div>
+        <p className="hero-search-note">Choose an area to discover nearby study spaces <span>✳</span></p>
       </section>
 
       <section className="texture-ribbon" aria-label="Explore Kitaab">

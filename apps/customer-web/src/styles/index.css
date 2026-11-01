@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Lora:wght@400;500;600&display=swap');
 
 :root {
   font-family: 'DM Sans', sans-serif;
@@ -15,7 +15,7 @@
   --home-rust: #b94d35;
   --marigold: #f3c944;
   --rust: #bb4b32;
-  --serif: 'Playfair Display', Georgia, serif;
+  --serif: 'Lora', Georgia, serif;
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 20px; }
