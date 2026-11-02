@@ -13,11 +13,11 @@
   --home-ink: #17211d;
   --home-muted: #68726b;
   --home-rust: #b94d35;
-  --marigold: #f3c944;
-  --rust: #bb4b32;
+  --marigold: #FFDE39;
+  --rust: #FFDE39;
   --serif: 'Lora', Georgia, serif;
 }
-* { box-sizing: border-box; }
+* { box-sizing: border-box; border-radius: 7px; }
 html { scroll-behavior: smooth; scroll-padding-top: 20px; }
 body { min-width: 320px; min-height: 100vh; margin: 0; }
 button, input, select { font: inherit; }

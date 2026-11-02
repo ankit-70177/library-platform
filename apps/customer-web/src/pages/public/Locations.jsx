@@ -12,13 +12,12 @@ function Locations() {
   return (
     <main className="locations-page">
       <section className="locations-page-intro texture">
-        <span className="eyebrow">Find your corner of calm</span>
         <h1>Good spaces,<br /><em>close to home.</em></h1>
         <p>Browse local study libraries by neighbourhood. These listings are examples while Kitaab is being built.</p>
         <label className="location-page-search"><span aria-hidden="true">⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search an area or amenity" aria-label="Search locations" /></label>
       </section>
       <section className="locations-page-list">
-        <div className="section-topline"><span className="eyebrow">Sonipat · Haryana</span><span className="section-index">SAMPLE DIRECTORY</span></div>
+        <div className="section-topline"></div>
         <div className="library-grid">
           {results.map((library, index) => (
             <article className={`library-card library-${library.color}`} key={library.id}>

@@ -5,8 +5,8 @@
 .utility-pill > span:first-child { font-size: 15px; }
 .utility-pill svg { width: 17px; height: 17px; flex: 0 0 auto; fill: currentColor; }
 .utility-pill b { margin-left: 4px; font-size: 15px; line-height: 1; }
-.utility-search a { min-height: 39px; padding: 0 16px; display: inline-flex; align-items: center; gap: 9px; background: #ffdf45; color: #171717; text-decoration: none; font-size: 12px; font-weight: 400; white-space: nowrap; }
-.utility-search a:hover { background: #f4cd27; }
+.utility-search a { min-height: 39px; padding: 0 16px; display: inline-flex; align-items: center; gap: 9px; background: #FFDE39; color: #171717; text-decoration: none; font-size: 12px; font-weight: 400; white-space: nowrap; }
+.utility-search a:hover { background: #f2d027; }
 .utility-search a > span:first-child { font-size: 17px; }
 .utility-magnify { margin-left: 4px; font-size: 22px; line-height: 1; }
 .navbar { max-width: 1480px; min-height: 112px; margin: 0 auto; padding: 18px clamp(20px, 4.7vw, 74px) 23px; display: flex; align-items: center; justify-content: space-between; gap: 38px; }
@@ -53,4 +53,28 @@
   .nav-links { flex-direction: column; align-items: flex-start; gap: 18px; }
   .nav-links a { font-size: 14px; }
   .owner-login { align-self: flex-start; }
+}
+
+.site-header { padding: 0 clamp(18px, 4vw, 56px); }
+.utility-nav, .navbar { max-width: 1480px; padding-left: 0; padding-right: 0; }
+.utility-nav { min-height: 50px; border-bottom: 1px solid #e8e3d9; }
+.utility-links, .utility-search { gap: 10px; }
+.utility-pill { background: transparent; }
+.utility-search a { background: #FFDE39; }
+.navbar { min-height: 96px; gap: 28px; }
+.brand-mark { width: 44px; height: 44px; display: grid; place-items: center; background: #17211d; color: #FFDE39; border-radius: 7px; }
+.brand-mark svg { width: 25px; height: 25px; stroke: currentColor; stroke-width: 1.7; }
+.brand-word { font-size: 23px; letter-spacing: .12em; }
+.nav-content { flex: 1; justify-content: flex-end; }
+.nav-links { gap: clamp(18px, 2.2vw, 34px); }
+.nav-links a { gap: 6px; }
+.nav-links svg, .owner-login svg, .utility-pill svg, .utility-search svg { width: 16px; height: 16px; stroke-width: 1.7; }
+.owner-login { background: #17211d; color: white; border-color: #17211d; }
+.owner-login:hover { background: #304438; }
+@media (max-width: 760px) {
+ .site-header { padding: 0 16px; }
+ .utility-nav { min-height: 44px; }
+ .navbar { min-height: 72px; }
+ .nav-content { flex: initial; }
+ .utility-search a { font-size: 8px; }
 }
