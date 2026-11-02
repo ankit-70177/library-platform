@@ -26,19 +26,16 @@ function Home() {
           <h1>Kitaab</h1>
           <p className="hero-description">A good place to find your focus.</p>
         </div>
-        <div className="hero-note"><span className="note-dot" /> SONIPAT, HARYANA <span className="note-divider">/</span> YOUR STUDY SPACE, FOUND</div>
       </section>
 
       <section className="hero-search-stage" aria-labelledby="search-title">
         <div className="hero-search-panel">
           <div className="search-panel-main">
-            <span className="eyebrow">Start close to home</span>
             <h2 id="search-title">What can we help you find?</h2>
             <form className="search-form" onSubmit={handleSearch}>
               <label className="sr-only" htmlFor="library-search">Search by city, area, or library</label>
               <span className="search-pin" aria-hidden="true">⌕</span>
               <input id="library-search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Type a city, area, or library name..." />
-              <button type="submit" aria-label="Search libraries">Search <span aria-hidden="true">⌕</span></button>
             </form>
             <div className="search-panel-actions">
               <button type="button" onClick={handleSearch}><span aria-hidden="true">▤</span> Search Libraries</button>
@@ -61,9 +58,9 @@ function Home() {
           <span className="eyebrow">Explore Kitaab</span>
           <h2>Find, Focus &amp; Grow</h2>
         </div>
-        <a className="ribbon-card ribbon-lime texture" href="#locations"><span className="ribbon-icon" aria-hidden="true">⌕</span><span className="ribbon-label">Find a place</span><strong>Libraries near you</strong><span className="ribbon-arrow" aria-hidden="true">↗</span></a>
-        <a className="ribbon-card ribbon-blue texture" href="#events"><span className="ribbon-icon" aria-hidden="true">✳</span><span className="ribbon-label">Make a little time</span><strong>Study together</strong><span className="ribbon-arrow" aria-hidden="true">↗</span></a>
-        <a className="ribbon-card ribbon-coral texture" href="#about"><span className="ribbon-icon" aria-hidden="true">✺</span><span className="ribbon-label">A note from us</span><strong>About Kitaab</strong><span className="ribbon-arrow" aria-hidden="true">↗</span></a>
+        <a className="ribbon-card ribbon-lime texture" href="#locations"><span className="ribbon-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span><span className="ribbon-label">Find a place</span><strong>Libraries near you</strong><span className="ribbon-arrow" aria-hidden="true">↗</span></a>
+        <a className="ribbon-card ribbon-blue texture" href="#events"><span className="ribbon-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H4zM8 20h8M12 16v4"/><path d="M8 9h8M8 12h5"/></svg></span><span className="ribbon-label">Make a little time</span><strong>Study together</strong><span className="ribbon-arrow" aria-hidden="true">↗</span></a>
+        <a className="ribbon-card ribbon-coral texture" href="#about"><span className="ribbon-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5zM8 8h8M8 12h8M8 16h5"/></svg></span><span className="ribbon-label">A note from us</span><strong>About Kitaab</strong><span className="ribbon-arrow" aria-hidden="true">↗</span></a>
       </section>
 
       <section className="locations-section zigzag-top" id="locations">
