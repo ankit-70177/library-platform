@@ -1,19 +1,23 @@
+import { Link } from 'react-router-dom'
+import { ArrowRight } from 'lucide-react'
 import { eventFormats } from '../../data/sampleContent.js'
 import './Home.css'
 
 function Events() {
   return (
     <main className="events-page">
-      <section className="events-page-intro texture">
-        <span className="eyebrow">Good things happen between the pages</span>
-        <h1>Make a little<br /><em>room for people.</em></h1>
-        <p>Study sessions, reading circles, and small ways to find your people. Kitaab community events are coming soon.</p>
+      <section className="events-page-hero grain-surface">
+        <h1>Make room<br /><em>for a good idea.</em></h1>
+        <p>Study sessions, reading circles, and little ways to find your people. Community events are part of the Kitaab vision.</p>
       </section>
       <section className="events-page-list">
-        <div className="section-topline"><span className="eyebrow">Things we’re dreaming up</span><span className="section-index">COMING SOON</span></div>
-        <div className="event-grid">
-          {eventFormats.map((event) => <article className={`event-card ${event.color} texture`} key={event.number}><span className="event-number">{event.number}</span><span className="event-stamp" aria-hidden="true">✳</span><div className="event-card-copy"><span>{event.tag}</span><h3>{event.title}</h3><p>{event.description}</p></div><span className="event-arrow" aria-hidden="true">↗</span></article>)}
+        <div className="events-page-grid">
+          {eventFormats.map((event) => <article className="events-page-card" key={event.number}>
+            <img src={event.image} alt="Students and neighbours taking part in a community activity" />
+            <div><h2>{event.title}</h2><p>{event.description} Event scheduling will be added later.</p></div>
+          </article>)}
         </div>
+        <Link className="wide-black-button" to="/locations">Find your study space <ArrowRight size={19} aria-hidden="true" /></Link>
       </section>
     </main>
   )

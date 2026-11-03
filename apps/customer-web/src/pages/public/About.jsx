@@ -1,19 +1,19 @@
+import { Link } from 'react-router-dom'
+import { ArrowRight } from 'lucide-react'
 import './Home.css'
 
 function About() {
   return (
     <main className="about-page">
-      <section className="about-page-hero texture">
-        <span className="eyebrow">A little about us</span>
-        <h1>Room to think.<br /><em>Space to become.</em></h1>
-        <p>Kitaab is being built to make finding a study library feel as natural as finding your favourite reading spot.</p>
-        <a className="button button-yellow" href="/#locations">Explore locations <span aria-hidden="true">↗</span></a>
+      <section className="about-page-hero grain-surface">
+        <h1>Good spaces.<br /><em>Better study days.</em></h1>
+        <p>Kitaab helps students discover local study libraries and find the space that fits the way they learn.</p>
       </section>
-      <section className="about-page-body">
-        <span className="eyebrow">Our idea</span>
-        <h2>Good spaces change the way a day feels.</h2>
-        <p>We’re bringing local study spaces together so students can discover a place that works for them, and library owners can welcome the people looking for one. Kitaab starts with Sonipat and grows one neighbourhood at a time.</p>
-        <p>We believe the right chair, a steady routine, and a little quiet can make room for big things.</p>
+      <section className="about-page-copy">
+        <h2>Finding a place to focus should feel simple.</h2>
+        <p>We’re bringing study libraries in and around Sonipat into one place. Browse neighbourhoods, compare facilities and opening hours, and see starting prices before choosing a space.</p>
+        <p>When you find a library that feels right, create a Kitaab account to keep your membership details together. This frontend preview uses sample listings and a local demo account; it does not connect to a payment or authentication service.</p>
+        <div className="about-page-callout grain-surface"><h3>Ready to find your corner of calm?</h3><Link className="black-button" to="/locations">Explore study libraries <ArrowRight size={18} aria-hidden="true" /></Link></div>
       </section>
     </main>
   )

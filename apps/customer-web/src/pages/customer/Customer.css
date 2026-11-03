@@ -1,0 +1,43 @@
+.customer-page { min-height: 65vh; padding: 64px max(22px, calc((100vw - 1200px) / 2)) 95px; background: #fbf9f4; font-family: 'Inter', Arial, sans-serif; }
+.auth-page { display: grid; grid-template-columns: minmax(380px, .85fr) 1fr; gap: 60px; align-items: stretch; }
+.auth-card { width: min(100%, 480px); margin: auto; padding: 30px 0; }
+.auth-card h1 { margin: 0 0 14px; font: 500 clamp(36px, 5vw, 56px)/1.08 'Lora', Georgia, serif; letter-spacing: -.035em; }
+.auth-intro { margin-bottom: 27px; color: #55514b; font-size: 14px; line-height: 1.6; }
+.auth-card form { display: grid; gap: 16px; }
+.auth-card label { display: grid; gap: 7px; font-size: 12px; font-weight: 500; }
+.auth-card input { height: 50px; padding: 0 13px; border: 1px solid #c6c0b7; border-radius: 2px; background: white; font-size: 14px; }
+.auth-submit { min-height: 52px; margin-top: 5px; padding: 0 16px; display: flex; justify-content: flex-start; align-items: center; gap: 5px; border: 0; background: #08090b; color: white; font-weight: 500; cursor: pointer; }
+.auth-notice { margin: 12px 0; color: #225cbd; font-size: 12px; }
+.auth-switch { margin-top: 20px; font-size: 13px; }
+.auth-switch a { color: #2058bb; font-weight: 500; }
+.demo-note { margin-top: 27px; padding-top: 16px; border-top: 1px solid #ddd7ce; color: #69655f; font-size: 11px; line-height: 1.5; }
+.auth-side { min-height: 515px; padding: 42px; display: flex; flex-direction: column; justify-content: flex-end; border-radius: 5px; background-position: center; background-size: cover; color: white; }
+.auth-side h2 { margin: 0 0 20px; font: 500 clamp(36px, 5vw, 56px)/1.08 'Lora', Georgia, serif; letter-spacing: -.035em; }
+.auth-side a { width: fit-content; display: inline-flex; align-items: center; gap: 5px; color: white; font-size: 13px; font-weight: 500; }
+.auth-side a svg { color: #ffdf3e; }
+.dashboard-page { padding-block: 67px 100px; }
+.dashboard-heading { margin-bottom: 35px; display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; }
+.dashboard-heading h1 { margin: 0; font: 500 clamp(36px, 5vw, 56px)/1.08 'Lora', Georgia, serif; letter-spacing: -.035em; }
+.dashboard-heading p { margin: 0 0 8px; color: #5c5852; font-size: 14px; }
+.dashboard-signout { min-height: 39px; padding: 0 14px; border: 1px solid #111; background: white; font-size: 12px; font-weight: 500; cursor: pointer; }
+.dashboard-empty > .serif-title { margin: 0 0 14px; font: 500 clamp(36px, 5vw, 56px)/1.08 'Lora', Georgia, serif; letter-spacing: -.035em; }
+.dashboard-grid { display: grid; grid-template-columns: 1.5fr .8fr; gap: 22px; }
+.dashboard-panel { padding: 27px; border: 1px solid #ded8cf; border-radius: 5px; background: white; }
+.dashboard-panel h2 { margin: 0 0 18px; font: 500 28px 'Lora', Georgia, serif; }
+.dashboard-membership { padding: 26px; background: linear-gradient(120deg,#cce7ef,#a8cc4b); }
+.dashboard-membership > p.membership-state { width: fit-content; margin: 0 0 13px; padding: 6px 9px; display: flex; align-items: center; gap: 6px; background: #08090b; color: white; font-size: 10px; font-weight: 500; }
+.dashboard-membership h3 { margin: 0 0 6px; font-size: 24px; font-weight: 500; }
+.dashboard-membership p { color: #343c32; font-size: 13px; }
+.dashboard-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.dashboard-actions button, .dashboard-actions a, .dashboard-empty a { min-height: 40px; padding: 0 13px; display: inline-flex; align-items: center; gap: 5px; border: 0; background: #08090b; color: white; text-decoration: none; font-size: 12px; font-weight: 500; cursor: pointer; }
+.dashboard-actions .secondary-action { border: 1px solid #111; background: white; color: #111; }
+.dashboard-list { margin: 0; padding: 0; list-style: none; }
+.dashboard-list li { padding: 13px 0; display: flex; justify-content: space-between; gap: 16px; border-bottom: 1px solid #e5e0d8; font-size: 13px; }
+.dashboard-list li span { color: #69655e; }
+.dashboard-list strong { font-weight: 500; }
+.dashboard-empty { padding: 35px; background: #f2eee6; }
+.dashboard-empty h2 { margin-bottom: 10px; font: 500 31px 'Lora', Georgia, serif; }
+.dashboard-empty p { max-width: 570px; color: #55514b; font-size: 14px; line-height: 1.6; }
+.dashboard-notice { margin-top: 16px; padding: 12px 14px; background: #e1f0cf; color: #283c15; font-size: 12px; }
+@media (max-width: 800px) { .auth-page { grid-template-columns: 1fr; gap: 25px; } .auth-card { width: min(100%, 560px); } .auth-side { min-height: 310px; } .dashboard-grid { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { .customer-page { padding: 40px 19px 70px; } .auth-card { padding: 10px 0; } .auth-side { min-height: 260px; padding: 25px; } .dashboard-heading { align-items: flex-start; flex-direction: column; } .dashboard-panel { padding: 20px; } .dashboard-membership { padding: 21px; } .dashboard-list li { font-size: 11px; } }
