@@ -1,16 +1,20 @@
+import { Link } from 'react-router-dom'
+import { ArrowRight, ArrowUp } from 'lucide-react'
 import './Footer.css'
 
 function Footer() {
   return (
     <footer className="site-footer">
       <div className="footer-main">
-        <a className="footer-brand" href="/#home"><span className="footer-mark">K</span><span>Kitaab<small>A better place to study</small></span></a>
-        <p>Find your focus.<br />Find your people.<br />Find your place.</p>
-        <nav className="footer-nav" aria-label="Footer navigation">
-          <a href="/#home">Home</a><a href="/locations">Locations</a><a href="/events">Events</a><a href="/about">About</a>
-        </nav>
+        <div className="footer-column footer-brand-column">
+          <Link className="footer-brand" to="/"><span className="footer-mark">K</span><span>KITAAB<small>Find your focus</small></span></Link>
+          <p>Find a library that fits your day.<br />Find your next good routine.</p>
+        </div>
+        <div className="footer-column"><h2>Explore</h2><Link to="/locations">Study libraries</Link><Link to="/events">Events & sessions</Link><Link to="/about">How it works</Link></div>
+        <div className="footer-column"><h2>Your account</h2><Link to="/login">Sign in</Link><Link to="/register">Create an account</Link><Link to="/dashboard">Memberships</Link></div>
+        <div className="footer-column footer-social"><h2>Find us around Sonipat</h2><p>Made for the hours you put in.</p><Link to="/locations">Explore local spaces <ArrowRight size={16} aria-hidden="true" /></Link></div>
       </div>
-      <div className="footer-bottom"><span>© 2026 Kitaab</span><span>Made for the study hours.</span><a href={import.meta.env.VITE_OWNER_APP_URL || 'http://localhost:5174'}>For library owners ↗</a></div>
+      <div className="footer-bottom"><span>© 2026 Kitaab · Student project</span><span>Discover · Compare · Study</span><a href="#home">Back to top <ArrowUp size={14} aria-hidden="true" /></a></div>
     </footer>
   )
 }

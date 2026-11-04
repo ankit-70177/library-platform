@@ -1,33 +1,34 @@
 import { useMemo, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
+import { ArrowRight, MapPin, Search, Star } from 'lucide-react'
 import { sampleLibraries } from '../../data/sampleContent.js'
 import './Home.css'
 
 function Locations() {
-  const [query, setQuery] = useState('')
+  const [searchParams] = useSearchParams()
+  const [query, setQuery] = useState(searchParams.get('search') || '')
   const results = useMemo(() => {
     const value = query.trim().toLowerCase()
-    return sampleLibraries.filter((library) => `${library.name} ${library.area} ${library.facilities.join(' ')}`.toLowerCase().includes(value))
+    if (!value) return sampleLibraries
+    return sampleLibraries.filter((library) => `${library.name} ${library.area} ${library.facilities.join(' ')} ${library.hours}`.toLowerCase().includes(value))
   }, [query])
 
   return (
-    <main className="locations-page">
-      <section className="locations-page-intro texture">
-        <span className="eyebrow">Find your corner of calm</span>
-        <h1>Good spaces,<br /><em>close to home.</em></h1>
-        <p>Browse local study libraries by neighbourhood. These listings are examples while Kitaab is being built.</p>
-        <label className="location-page-search"><span aria-hidden="true">⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search an area or amenity" aria-label="Search locations" /></label>
+    <main className="directory-page">
+      <section className="directory-hero grain-surface">
+        <h1>Find your<br /><em>study space.</em></h1>
+        <p>Search neighbourhoods and compare local study libraries by price, facilities, and timings.</p>
+        <label className="directory-search"><Search size={22} aria-hidden="true" /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Try Model Town, Wi-Fi, or 24 hours" aria-label="Search libraries by neighbourhood or facility" /></label>
       </section>
-      <section className="locations-page-list">
-        <div className="section-topline"><span className="eyebrow">Sonipat · Haryana</span><span className="section-index">SAMPLE DIRECTORY</span></div>
-        <div className="library-grid">
-          {results.map((library, index) => (
-            <article className={`library-card library-${library.color}`} key={library.id}>
-              <div className="library-image texture"><span className="image-index">K / 0{index + 1}</span><span className="image-mark">{index === 0 ? 'शांत' : index === 1 ? 'पढ़ें' : 'ध्यान'}</span><span className="image-corner">↗</span></div>
-              <div className="library-card-body"><div className="library-title-row"><div><p className="card-kicker">{library.area}</p><h3>{library.name}</h3></div><span className="rating">✳ <span>Sample</span></span></div><div className="facility-list">{library.facilities.map((facility) => <span key={facility}>{facility}</span>)}</div><div className="library-card-bottom"><span><strong>₹{library.price}</strong> <small>/ month from</small></span><span className="seat-count">{library.seats} sample seats</span></div></div>
-            </article>
-          ))}
+      <section className="directory-results content-width">
+        <div className="section-title-row"><div><h2>{results.length} spaces to explore</h2></div></div>
+        <div className="directory-grid">
+          {results.map((library) => <article className="directory-card" key={library.id}>
+            <img src={library.image} alt="A community study space" />
+            <div className="directory-card-copy"><p className="library-meta"><MapPin size={14} aria-hidden="true" /> {library.area}</p><h3>{library.name}</h3><p className="directory-hours">{library.hours}</p><div className="directory-tags">{library.facilities.map((facility) => <span key={facility}>{facility}</span>)}</div><div className="directory-card-bottom"><span><strong>₹{library.price}</strong> <small>/ month</small></span><span><Star size={14} aria-hidden="true" /> {library.rating} · {library.seats} seats</span></div><Link className="directory-cta" to={`/register?library=${library.id}`}>Choose this space <ArrowRight size={17} aria-hidden="true" /></Link></div>
+          </article>)}
         </div>
-        {results.length === 0 && <p className="empty-results">No sample locations match that search.</p>}
+        {results.length === 0 && <div className="directory-empty"><h3>No spaces match that search yet.</h3><p>Try a neighbourhood such as Model Town, Kundli, or Murthal Road.</p><button type="button" onClick={() => setQuery('')}>Show all libraries</button></div>}
       </section>
     </main>
   )

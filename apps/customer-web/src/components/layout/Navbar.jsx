@@ -1,7 +1,18 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { ArrowRight, ArrowUpRight, ChevronDown, CircleHelp, MapPin, Search, UserPlus, UserRound } from 'lucide-react'
 import './Navbar.css'
 
-const ownerAppUrl = import.meta.env.VITE_OWNER_APP_URL || 'http://localhost:5174'
+function BookMark() {
+  return (
+    <svg className="brand-mark" viewBox="0 0 50 50" aria-hidden="true">
+      <path d="M5 11c7-2 13-1 20 4v27c-7-5-13-6-20-4z" fill="currentColor" />
+      <path d="M45 11c-7-2-13-1-20 4v27c7-5 13-6 20-4z" fill="currentColor" />
+      <path d="M25 15v27" stroke="#f6f1e8" strokeWidth="1.7" />
+      <path d="M11 19c4 0 7 1 10 3M11 25c4 0 7 1 10 3M39 19c-4 0-7 1-10 3M39 25c-4 0-7 1-10 3" fill="none" stroke="#f6f1e8" strokeWidth="1.2" />
+    </svg>
+  )
+}
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -11,43 +22,28 @@ function Navbar() {
     <header className="site-header">
       <div className="utility-nav">
         <div className="utility-links">
-          <a className="utility-pill" href="/login"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="4" /><path d="M4 21a8 8 0 0 1 16 0z" /></svg> My Account</a>
-          <button className="utility-pill" type="button"><span aria-hidden="true">↗</span> <span>Quick Links</span><b aria-hidden="true">⌄</b></button>
-          <a className="utility-pill" href="/register"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="1" /><circle cx="9" cy="10" r="2.5" fill="#fff" /><path d="M5.5 17a3.5 3.5 0 0 1 7 0" fill="#fff" /><path d="M15 9h4M15 13h4" stroke="#fff" strokeWidth="1.5" /></svg> Memberships <b aria-hidden="true">⌄</b></a>
-          <button className="utility-pill" type="button"><span aria-hidden="true">◎</span> <span>Languages</span><b aria-hidden="true">⌄</b></button>
+          <Link className="utility-pill" to="/dashboard"><UserRound size={17} aria-hidden="true" /> My account</Link>
+          <Link className="utility-pill" to="/register"><UserPlus size={17} aria-hidden="true" /> Join Kitaab</Link>
+          <Link className="utility-pill" to="/about"><CircleHelp size={17} aria-hidden="true" /> How it works</Link>
         </div>
         <div className="utility-search">
-          <a href="/locations"><span aria-hidden="true">▤</span> Search Libraries <span className="utility-magnify">⌕</span></a>
-          <a href="/#locations"><span aria-hidden="true">⌖</span> Search Kitaab <span className="utility-magnify">⌕</span></a>
+          <Link to="/locations"><MapPin size={16} aria-hidden="true" /> Search libraries <Search className="utility-magnify" size={19} aria-hidden="true" /></Link>
+          <Link to="/locations">Explore Sonipat <ArrowRight className="utility-magnify" size={19} aria-hidden="true" /></Link>
         </div>
       </div>
-
       <nav className="navbar" aria-label="Main navigation">
-        <a className="brand" href="/" aria-label="Kitaab home">
-          <svg className="brand-mark" viewBox="0 0 50 50" role="img" aria-label="">
-            <path d="M5 11c7-2 13-1 20 4v27c-7-5-13-6-20-4z" fill="currentColor" />
-            <path d="M45 11c-7-2-13-1-20 4v27c7-5 13-6 20-4z" fill="currentColor" />
-            <path d="M25 15v27" stroke="#f6f1e7" strokeWidth="1.7" />
-            <path d="M11 19c4 0 7 1 10 3M11 25c4 0 7 1 10 3M39 19c-4 0-7 1-10 3M39 25c-4 0-7 1-10 3" fill="none" stroke="#f6f1e7" strokeWidth="1.2" />
-          </svg>
-          <span className="brand-word">KITAAB</span>
-        </a>
-
-        <button
-          className={`menu-toggle ${menuOpen ? 'is-open' : ''}`}
-          onClick={() => setMenuOpen(!menuOpen)}
-          aria-expanded={menuOpen}
-          aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-        ><span /><span /></button>
-
+        <Link className="brand" to="/" aria-label="Kitaab home" onClick={closeMenu}>
+          <BookMark /><span className="brand-word">KITAAB</span>
+        </Link>
+        <button className={`menu-toggle ${menuOpen ? 'is-open' : ''}`} type="button" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}><span /><span /></button>
         <div className={`nav-content ${menuOpen ? 'is-open' : ''}`}>
           <ul className="nav-links">
-            <li><a href="/#home" onClick={closeMenu}>Home</a></li>
-            <li><a href="/locations" onClick={closeMenu}>Locations <b aria-hidden="true">⌄</b></a></li>
-            <li><a href="/events" onClick={closeMenu}>Events <b aria-hidden="true">⌄</b></a></li>
-            <li><a href="/about" onClick={closeMenu}>About <b aria-hidden="true">⌄</b></a></li>
+            <li><Link to="/locations" onClick={closeMenu}>Find a library <ChevronDown size={15} aria-hidden="true" /></Link></li>
+            <li><Link to="/register" onClick={closeMenu}>Memberships <ChevronDown size={15} aria-hidden="true" /></Link></li>
+            <li><Link to="/events" onClick={closeMenu}>Events <ChevronDown size={15} aria-hidden="true" /></Link></li>
+            <li><Link to="/about" onClick={closeMenu}>About Kitaab <ChevronDown size={15} aria-hidden="true" /></Link></li>
           </ul>
-          <a className="owner-login" href={ownerAppUrl}>Owner Login <span aria-hidden="true">↗</span></a>
+          <Link className="account-button" to="/login" onClick={closeMenu}>Sign in <ArrowUpRight size={16} aria-hidden="true" /></Link>
         </div>
       </nav>
     </header>
