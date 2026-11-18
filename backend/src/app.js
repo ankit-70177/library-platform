@@ -1,19 +1,34 @@
 import cors from 'cors'
 import express from 'express'
 import pool from './config/db.js'
+
+// Import API route modules
 import authRoutes from './routes/authRoutes.js'
 import ownerRoutes from './routes/ownerRoutes.js'
+import libraryRoutes from './routes/libraryRoutes.js'
 
 const app = express()
 
+// Parse incoming JSON request bodies
 app.use(express.json())
-app.use(cors({
-  origin: 'http://localhost:5173',
-}))
 
+// Enable frontend communication
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+  })
+)
+
+// Authentication APIs
 app.use('/api/auth', authRoutes)
+
+// Owner application and management APIs
 app.use('/api/owners', ownerRoutes)
 
+// Library Management APIs
+app.use('/api/libraries', libraryRoutes)
+
+// Check backend and PostgreSQL connection
 app.get('/api/health', async (_request, response) => {
   try {
     const result = await pool.query(
@@ -37,4 +52,8 @@ app.get('/api/health', async (_request, response) => {
   }
 })
 
+// Export Express application
 export default app
+import discoveryRoutes from './routes/discoveryRoutes.js'
+// Public Library Discovery APIs
+app.use('/api/discovery', discoveryRoutes)
