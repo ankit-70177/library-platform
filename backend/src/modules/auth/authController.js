@@ -1,5 +1,5 @@
-
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 import pool from '../../config/db.js'
 
 export const register = async (req, res) => {
@@ -69,3 +69,82 @@ export const register = async (req, res) => {
     })
   }
 }
+
+
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body
+
+    // Validate required fields
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email and password are required',
+      })
+    }
+
+    const cleanEmail = email.trim().toLowerCase()
+
+    // Find user in PostgreSQL
+    const result = await pool.query(
+      `SELECT id, name, email, password_hash, role
+       FROM users
+       WHERE LOWER(email) = $1`,
+      [cleanEmail]
+    )
+
+    if (result.rows.length === 0) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid email or password',
+      })
+    }
+
+    const user = result.rows[0]
+
+    // Verify password
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      user.password_hash
+    )
+
+    if (!isPasswordValid) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid email or password',
+      })
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      {
+        id: user.id,
+        role: user.role,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: process.env.JWT_EXPIRES_IN || '1d',
+      }
+    )
+
+    return res.status(200).json({
+      success: true,
+      message: 'Login successful',
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    })
+  } catch (error) {
+    console.error('Login error:', error.message)
+
+    return res.status(500).json({
+      success: false,
+      message: 'Something went wrong during login',
+    })
+  }
+}
+
