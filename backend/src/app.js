@@ -2,6 +2,7 @@ import cors from 'cors'
 import express from 'express'
 import pool from './config/db.js'
 import authRoutes from './routes/authRoutes.js'
+import ownerRoutes from './routes/ownerRoutes.js'
 
 const app = express()
 
@@ -11,6 +12,7 @@ app.use(cors({
 }))
 
 app.use('/api/auth', authRoutes)
+app.use('/api/owners', ownerRoutes)
 
 app.get('/api/health', async (_request, response) => {
   try {
