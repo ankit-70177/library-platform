@@ -1,5 +1,5 @@
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard,
@@ -29,6 +29,19 @@ import {
 import { sampleLibraries } from '../../data/sampleContent.js'
 import './Customer.css'
 import './Dashboard.css'
+import {
+  getCustomerDashboard,
+  getMyPayments,
+  getMySubscriptions,
+  cancelMySubscription,
+  getMyReviews,
+  createMyReview,
+  deleteMyReview,
+  getMyBookings,
+  cancelMyBooking,
+  getMySavedLibraries,
+  removeMySavedLibrary
+} from '../../services/api.js'
 
 const getStorage = (key, fallback) => {
   try {
@@ -46,6 +59,177 @@ const saveStorage = (key, value) => {
 function Dashboard() {
   const navigate = useNavigate()
 
+  const [dashboardData, setDashboardData] = useState(null)
+  const [dashboardLoading, setDashboardLoading] = useState(true)
+  const [dashboardError, setDashboardError] = useState('')
+  const [payments, setPayments] = useState([])
+  const [paymentsLoading, setPaymentsLoading] = useState(true)
+  const [paymentsError, setPaymentsError] = useState('')
+  const [subscriptions, setSubscriptions] = useState([])
+  const [subscriptionsLoading, setSubscriptionsLoading] = useState(true)
+  const [subscriptionsError, setSubscriptionsError] = useState('')
+  const [subscriptionActionLoading, setSubscriptionActionLoading] = useState(null)
+  const [bookings, setBookings] = useState([])
+  const [bookingsLoading, setBookingsLoading] = useState(true)
+  const [bookingsError, setBookingsError] = useState('')
+  const [bookingActionLoading, setBookingActionLoading] = useState(null)
+
+
+  useEffect(() => {
+    let isMounted = true
+
+    const loadDashboard = async () => {
+      try {
+        setDashboardLoading(true)
+        setDashboardError('')
+
+        const response = await getCustomerDashboard()
+
+        if (isMounted) {
+          setDashboardData(response.dashboard)
+        }
+      } catch (error) {
+        if (isMounted) {
+          setDashboardError(error.message || 'Unable to load dashboard.')
+        }
+      } finally {
+        if (isMounted) {
+          setDashboardLoading(false)
+        }
+      }
+    }
+
+    loadDashboard()
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+
+  useEffect(() => {
+    let isMounted = true
+
+    const loadPayments = async () => {
+      try {
+        setPaymentsLoading(true)
+        setPaymentsError('')
+
+        const response = await getMyPayments()
+
+        if (isMounted) {
+          setPayments(response.payments || [])
+        }
+      } catch (error) {
+        if (isMounted) {
+          setPaymentsError(error.message || 'Unable to load payments.')
+        }
+      } finally {
+        if (isMounted) {
+          setPaymentsLoading(false)
+        }
+      }
+    }
+
+    loadPayments()
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  useEffect(() => {
+    let isMounted = true
+
+    const loadSubscriptions = async () => {
+      try {
+        setSubscriptionsLoading(true)
+        setSubscriptionsError('')
+
+        const response = await getMySubscriptions()
+
+        if (isMounted) {
+          setSubscriptions(response.subscriptions || [])
+        }
+      } catch (error) {
+        if (isMounted) {
+          setSubscriptionsError(error.message || 'Unable to load subscriptions.')
+        }
+      } finally {
+        if (isMounted) {
+          setSubscriptionsLoading(false)
+        }
+      }
+    }
+
+    loadSubscriptions()
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  useEffect(() => {
+    let isMounted = true
+
+    const loadReviews = async () => {
+      try {
+        setReviewsLoading(true)
+        setReviewsError('')
+        const response = await getMyReviews()
+
+        if (isMounted) {
+          setReviews(response.reviews || [])
+        }
+      } catch (error) {
+        if (isMounted) {
+          setReviewsError(error.message || 'Unable to load reviews.')
+        }
+      } finally {
+        if (isMounted) {
+          setReviewsLoading(false)
+        }
+      }
+    }
+
+    loadReviews()
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  useEffect(() => {
+    let isMounted = true
+
+    const loadBookings = async () => {
+      try {
+        setBookingsLoading(true)
+        setBookingsError('')
+
+        const response = await getMyBookings()
+
+        if (isMounted) {
+          setBookings(response.bookings || [])
+        }
+      } catch (error) {
+        if (isMounted) {
+          setBookingsError(error.message || 'Unable to load bookings.')
+        }
+      } finally {
+        if (isMounted) {
+          setBookingsLoading(false)
+        }
+      }
+    }
+
+    loadBookings()
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
   const [user, setUser] = useState(() =>
     getStorage('kitaab-demo-user', null)
   )
@@ -57,13 +241,42 @@ function Dashboard() {
     () => window.localStorage.getItem('kitaab-demo-membership') || 'active'
   )
 
-  const [savedLibraries, setSavedLibraries] = useState(() =>
-    getStorage('kitaab-demo-saved-libraries', user?.libraryId ? [Number(user.libraryId)] : [])
-  )
+  const [savedLibraries, setSavedLibraries] = useState([])
+  const [savedLibrariesLoading, setSavedLibrariesLoading] = useState(true)
+  const [savedLibrariesError, setSavedLibrariesError] = useState('')
+  const [savedLibraryActionLoading, setSavedLibraryActionLoading] = useState(null)
 
-  const [reviews, setReviews] = useState(() =>
-    getStorage('kitaab-demo-reviews', [])
-  )
+  useEffect(() => {
+    let isMounted = true
+
+    const loadSavedLibraries = async () => {
+      try {
+        setSavedLibrariesLoading(true)
+        setSavedLibrariesError('')
+
+        const response = await getMySavedLibraries()
+
+        if (isMounted) {
+          setSavedLibraries(response.libraries || [])
+        }
+      } catch (error) {
+        if (isMounted) {
+          setSavedLibrariesError(error.message || 'Unable to load saved libraries.')
+        }
+      } finally {
+        if (isMounted) {
+          setSavedLibrariesLoading(false)
+        }
+      }
+    }
+
+    loadSavedLibraries()
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
 
   const [notifications, setNotifications] = useState(() =>
     getStorage('kitaab-demo-notifications', [
@@ -89,6 +302,12 @@ function Dashboard() {
     city: user?.city || 'Sonipat'
   }))
 
+  const [reviews, setReviews] = useState([])
+  const [reviewsLoading, setReviewsLoading] = useState(true)
+  const [reviewsError, setReviewsError] = useState('')
+  const [reviewActionLoading, setReviewActionLoading] = useState(false)
+  const [deletingReviewId, setDeletingReviewId] = useState(null)
+
   const [reviewText, setReviewText] = useState('')
   const [reviewRating, setReviewRating] = useState('5')
   const [reviewLibrary, setReviewLibrary] = useState('')
@@ -108,6 +327,7 @@ function Dashboard() {
   const navigationItems = [
     { name: 'Overview', icon: LayoutDashboard },
     { name: 'My Membership', icon: BookOpen },
+    { name: 'My Bookings', icon: Clock },
     { name: 'Saved Libraries', icon: Bookmark },
     { name: 'My Reviews', icon: Star },
     { name: 'Payment History', icon: CreditCard },
@@ -122,6 +342,33 @@ function Dashboard() {
     setNotice('')
   }
 
+  const handleCancelBooking = async (bookingId) => {
+    const confirmed = window.confirm(
+      'Are you sure you want to cancel this booking?'
+    )
+
+    if (!confirmed) return
+
+    try {
+      setBookingActionLoading(bookingId)
+      const response = await cancelMyBooking(bookingId)
+
+      setBookings((current) =>
+        current.map((booking) =>
+          booking.id === bookingId
+            ? { ...booking, status: 'cancelled' }
+            : booking
+        )
+      )
+
+      setNotice(response.message || 'Booking cancelled successfully.')
+    } catch (error) {
+      setNotice(error.message || 'Unable to cancel booking.')
+    } finally {
+      setBookingActionLoading(null)
+    }
+  }
+
   const updateMembership = (nextState) => {
     window.localStorage.setItem('kitaab-demo-membership', nextState)
     setMembershipState(nextState)
@@ -133,16 +380,25 @@ function Dashboard() {
     )
   }
 
-  const toggleSavedLibrary = (libraryId) => {
-    const updated = savedLibraries.includes(libraryId)
-      ? savedLibraries.filter((id) => id !== libraryId)
-      : [...savedLibraries, libraryId]
+  const toggleSavedLibrary = async (libraryId) => {
+    try {
+      setSavedLibraryActionLoading(libraryId)
 
-    setSavedLibraries(updated)
-    saveStorage('kitaab-demo-saved-libraries', updated)
+      const response = await removeMySavedLibrary(libraryId)
+
+      setSavedLibraries((current) =>
+        current.filter((library) => library.id !== libraryId)
+      )
+
+      setNotice(response.message || 'Library removed from saved list.')
+    } catch (error) {
+      setNotice(error.message || 'Unable to remove saved library.')
+    } finally {
+      setSavedLibraryActionLoading(null)
+    }
   }
 
-  const addReview = (event) => {
+  const addReview = async (event) => {
     event.preventDefault()
 
     if (!reviewLibrary || !reviewText.trim()) {
@@ -150,35 +406,42 @@ function Dashboard() {
       return
     }
 
-    const library = sampleLibraries.find(
-      (item) => item.id === Number(reviewLibrary)
-    )
+    try {
+      setReviewActionLoading(true)
+      setNotice('')
 
-    const newReview = {
-      id: Date.now(),
-      libraryName: library?.name || 'Library',
-      rating: Number(reviewRating),
-      comment: reviewText.trim(),
-      date: new Date().toLocaleDateString()
+      await createMyReview({
+        library_id: Number(reviewLibrary),
+        rating: Number(reviewRating),
+        comment: reviewText.trim()
+      })
+
+      const response = await getMyReviews()
+      setReviews(response.reviews || [])
+      setReviewText('')
+      setReviewLibrary('')
+      setReviewRating('5')
+      setNotice('Review submitted successfully.')
+    } catch (error) {
+      setNotice(error.message || 'Unable to submit review.')
+    } finally {
+      setReviewActionLoading(false)
     }
-
-    const updated = [newReview, ...reviews]
-
-    setReviews(updated)
-    saveStorage('kitaab-demo-reviews', updated)
-
-    setReviewText('')
-    setReviewLibrary('')
-    setReviewRating('5')
-    setNotice('Your demo review has been added.')
   }
 
-  const deleteReview = (reviewId) => {
-    const updated = reviews.filter((review) => review.id !== reviewId)
+  const deleteReview = async (reviewId) => {
+    try {
+      setDeletingReviewId(reviewId)
+      setNotice('')
 
-    setReviews(updated)
-    saveStorage('kitaab-demo-reviews', updated)
-    setNotice('Review removed.')
+      await deleteMyReview(reviewId)
+      setReviews((current) => current.filter((review) => review.id !== reviewId))
+      setNotice('Review deleted successfully.')
+    } catch (error) {
+      setNotice(error.message || 'Unable to delete review.')
+    } finally {
+      setDeletingReviewId(null)
+    }
   }
 
   const markNotificationRead = (notificationId) => {
@@ -242,8 +505,8 @@ function Dashboard() {
       <div className="kd-stats-grid">
         <div className="kd-stat-card">
           <span>My Membership</span>
-          <h3>{selectedLibrary ? '01' : '00'}</h3>
-          <p>{selectedLibrary ? 'Selected library' : 'No membership yet'}</p>
+          <h3>{dashboardData?.statistics?.subscriptions?.active ?? 0}</h3>
+          <p>Active subscriptions</p>
         </div>
 
         <div className="kd-stat-card">
@@ -254,7 +517,7 @@ function Dashboard() {
 
         <div className="kd-stat-card">
           <span>My Reviews</span>
-          <h3>{reviews.length}</h3>
+          <h3>{dashboardData?.statistics?.reviews?.total ?? 0}</h3>
           <p>Reviews submitted</p>
         </div>
 
@@ -352,57 +615,183 @@ function Dashboard() {
     </>
   )
 
+  const handleCancelSubscription = async (subscriptionId) => {
+    try {
+      setSubscriptionActionLoading(subscriptionId)
+      setNotice('')
+
+      await cancelMySubscription(subscriptionId)
+
+      const response = await getMySubscriptions()
+      setSubscriptions(response.subscriptions || [])
+      setNotice('Subscription cancelled successfully.')
+    } catch (error) {
+      setNotice(error.message || 'Unable to cancel subscription.')
+    } finally {
+      setSubscriptionActionLoading(null)
+    }
+  }
+
+  const renderBookings = () => (
+    <>
+      <div className="kd-welcome">
+        <div>
+          <span className="kd-eyebrow">YOUR RESERVATIONS</span>
+          <h1>My Bookings</h1>
+          <p>View your library seat bookings and manage upcoming visits.</p>
+        </div>
+      </div>
+
+      <section className="kd-panel">
+        {bookingsLoading ? (
+          <div className="kd-empty">
+            <Clock size={35} />
+            <h3>Loading bookings...</h3>
+          </div>
+        ) : bookingsError ? (
+          <div className="kd-empty">
+            <Clock size={35} />
+            <h3>Unable to load bookings</h3>
+            <p>{bookingsError}</p>
+          </div>
+        ) : bookings.length > 0 ? (
+          <div className="kd-review-list">
+            {bookings.map((booking) => {
+              const isUpcoming =
+                booking.status === 'confirmed' &&
+                new Date(booking.start_time) > new Date()
+
+              return (
+                <div className="kd-review-card" key={booking.id}>
+                  <div className="kd-panel-heading">
+                    <div>
+                      <h3>{booking.library_name}</h3>
+                      <p>
+                        <MapPin size={14} /> {booking.library_city}
+                      </p>
+                    </div>
+                    <span className={`kd-status ${
+                      booking.status === 'cancelled' ? 'cancelled' : ''
+                    }`}>
+                      {booking.status}
+                    </span>
+                  </div>
+
+                  <p><strong>Booking ID:</strong> #{booking.id}</p>
+                  <p><strong>Seats booked:</strong> {booking.seats_booked}</p>
+                  <p>
+                    <strong>Start:</strong>{' '}
+                    {new Date(booking.start_time).toLocaleString()}
+                  </p>
+                  <p>
+                    <strong>End:</strong>{' '}
+                    {new Date(booking.end_time).toLocaleString()}
+                  </p>
+                  <p><strong>Address:</strong> {booking.library_address}</p>
+
+                  {isUpcoming && (
+                    <button
+                      className="kd-danger-button"
+                      disabled={bookingActionLoading === booking.id}
+                      onClick={() => handleCancelBooking(booking.id)}
+                    >
+                      <XCircle size={15} />
+                      {bookingActionLoading === booking.id
+                        ? 'Cancelling...'
+                        : 'Cancel Booking'}
+                    </button>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        ) : (
+          <div className="kd-empty">
+            <Clock size={35} />
+            <h3>No bookings found</h3>
+            <p>Your library seat reservations will appear here.</p>
+            <Link to="/locations" className="kd-primary-button">
+              Browse Libraries <ArrowRight size={15} />
+            </Link>
+          </div>
+        )}
+      </section>
+    </>
+  )
+
   const renderMembership = () => (
     <>
       <div className="kd-welcome">
         <div>
           <span className="kd-eyebrow">YOUR SUBSCRIPTION</span>
           <h1>My Membership</h1>
-          <p>Manage your selected study space.</p>
+          <p>View and manage your library subscriptions.</p>
         </div>
       </div>
 
       <section className="kd-panel">
-        {selectedLibrary ? (
-          <>
-            <div className="kd-panel-heading">
-              <div>
-                <h2>{selectedLibrary.name}</h2>
-                <p>Your selected library</p>
+        {subscriptionsLoading ? (
+          <div className="kd-empty">
+            <BookOpen size={35} />
+            <h3>Loading memberships...</h3>
+          </div>
+        ) : subscriptionsError ? (
+          <div className="kd-empty">
+            <BookOpen size={35} />
+            <h3>Unable to load memberships</h3>
+            <p>{subscriptionsError}</p>
+          </div>
+        ) : subscriptions.length > 0 ? (
+          <div className="kd-review-list">
+            {subscriptions.map((subscription) => (
+              <div className="kd-membership-card" key={subscription.id}>
+                <div className="kd-panel-heading">
+                  <div>
+                    <h3>{subscription.library_name}</h3>
+                    <p>
+                      <MapPin size={14} /> {subscription.library_city}
+                    </p>
+                  </div>
+                  <span className={`kd-status ${
+                    subscription.status === 'cancelled' ||
+                    subscription.status === 'expired' ? 'cancelled' : ''
+                  }`}>
+                    {subscription.status}
+                  </span>
+                </div>
+
+                <p><strong>Plan:</strong> {subscription.plan_name}</p>
+                <p><strong>Price:</strong> ₹{subscription.price}</p>
+                <p><strong>Duration:</strong> {subscription.duration_days} days</p>
+                <p>
+                  <strong>Start date:</strong>{' '}
+                  {new Date(subscription.start_date).toLocaleDateString()}
+                </p>
+                <p>
+                  <strong>End date:</strong>{' '}
+                  {new Date(subscription.end_date).toLocaleDateString()}
+                </p>
+
+                {subscription.status === 'active' && (
+                  <button
+                    className="kd-danger-button"
+                    disabled={subscriptionActionLoading === subscription.id}
+                    onClick={() => handleCancelSubscription(subscription.id)}
+                  >
+                    <CirclePause size={15} />
+                    {subscriptionActionLoading === subscription.id
+                      ? 'Cancelling...'
+                      : 'Cancel Subscription'}
+                  </button>
+                )}
               </div>
-              <span className={`kd-status ${membershipState === 'cancelled' ? 'cancelled' : ''}`}>
-                {membershipState === 'active' ? 'Active' : 'Cancelled'}
-              </span>
-            </div>
-
-            <div className="kd-membership-card">
-              <h3>{selectedLibrary.name}</h3>
-              <p><MapPin size={14} /> {selectedLibrary.area}</p>
-              <p>Monthly starting price: ₹{selectedLibrary.price}</p>
-              <p>This is a frontend demo selection. No real subscription or payment exists.</p>
-
-              {membershipState === 'active' ? (
-                <button
-                  className="kd-danger-button"
-                  onClick={() => updateMembership('cancelled')}
-                >
-                  <CirclePause size={15} /> Cancel Demo Selection
-                </button>
-              ) : (
-                <button
-                  className="kd-primary-button"
-                  onClick={() => updateMembership('active')}
-                >
-                  <CheckCircle size={15} /> Restore Selection
-                </button>
-              )}
-            </div>
-          </>
+            ))}
+          </div>
         ) : (
           <div className="kd-empty">
             <BookOpen size={35} />
             <h3>No membership found</h3>
-            <p>Find a library that matches your study needs.</p>
+            <p>Find a library and choose a membership plan.</p>
             <Link to="/locations" className="kd-primary-button">
               Browse Libraries <ArrowRight size={15} />
             </Link>
@@ -413,10 +802,6 @@ function Dashboard() {
   )
 
   const renderSavedLibraries = () => {
-    const savedItems = sampleLibraries.filter((library) =>
-      savedLibraries.includes(library.id)
-    )
-
     return (
       <>
         <div className="kd-welcome">
@@ -432,19 +817,33 @@ function Dashboard() {
         </div>
 
         <section className="kd-panel">
-          {savedItems.length > 0 ? (
+          {savedLibrariesLoading ? (
+            <div className="kd-empty">
+              <p>Loading your saved libraries...</p>
+            </div>
+          ) : savedLibrariesError ? (
+            <div className="kd-empty">
+              <p>{savedLibrariesError}</p>
+            </div>
+          ) : savedLibraries.length > 0 ? (
             <div className="kd-library-grid">
-              {savedItems.map((library) => (
+              {savedLibraries.map((library) => (
                 <div className="kd-library-card" key={library.id}>
                   <div>
                     <h3>{library.name}</h3>
-                    <p><MapPin size={13} /> {library.area}</p>
-                    <p>₹{library.price}/month</p>
+                    <p>
+                      <MapPin size={13} /> {library.locality || library.address}
+                    </p>
+                    <p>{library.city}</p>
                     <button
                       className="kd-danger-button"
                       onClick={() => toggleSavedLibrary(library.id)}
+                      disabled={savedLibraryActionLoading === library.id}
                     >
-                      <Bookmark size={14} /> Remove Saved
+                      <Bookmark size={14} />
+                      {savedLibraryActionLoading === library.id
+                        ? 'Removing...'
+                        : 'Remove Saved'}
                     </button>
                   </div>
                 </div>
@@ -479,7 +878,7 @@ function Dashboard() {
         <div className="kd-panel-heading">
           <div>
             <h2>Write a Review</h2>
-            <p>Reviews are saved locally in this demo.</p>
+            <p>Share feedback about a library you are subscribed to.</p>
           </div>
           <Star size={21} />
         </div>
@@ -493,11 +892,13 @@ function Dashboard() {
               required
             >
               <option value="">Choose a library</option>
-              {sampleLibraries.map((library) => (
-                <option key={library.id} value={library.id}>
-                  {library.name}
-                </option>
-              ))}
+              {subscriptions
+                .filter((subscription) => subscription.status === 'active')
+                .map((subscription) => (
+                  <option key={subscription.library_id} value={subscription.library_id}>
+                    {subscription.library_name}
+                  </option>
+                ))}
             </select>
           </label>
 
@@ -525,8 +926,13 @@ function Dashboard() {
             />
           </label>
 
-          <button className="kd-primary-button" type="submit">
-            <Plus size={16} /> Submit Review
+          <button
+            className="kd-primary-button"
+            type="submit"
+            disabled={reviewActionLoading}
+          >
+            <Plus size={16} />
+            {reviewActionLoading ? 'Submitting...' : 'Submit Review'}
           </button>
         </form>
       </section>
@@ -536,13 +942,22 @@ function Dashboard() {
           <h2>Your Reviews ({reviews.length})</h2>
         </div>
 
-        {reviews.length > 0 ? (
+        {reviewsLoading ? (
+          <div className="kd-empty">
+            <p>Loading your reviews...</p>
+          </div>
+        ) : reviewsError ? (
+          <div className="kd-empty">
+            <h3>Unable to load reviews</h3>
+            <p>{reviewsError}</p>
+          </div>
+        ) : reviews.length > 0 ? (
           <div className="kd-review-list">
             {reviews.map((review) => (
               <div className="kd-review-card" key={review.id}>
                 <div className="kd-panel-heading">
                   <div>
-                    <h3>{review.libraryName}</h3>
+                    <h3>{review.library_name}</h3>
                     <span>{'★'.repeat(review.rating)} ({review.rating}/5)</span>
                   </div>
 
@@ -550,13 +965,18 @@ function Dashboard() {
                     className="kd-icon-button"
                     onClick={() => deleteReview(review.id)}
                     aria-label="Delete review"
+                    disabled={deletingReviewId === review.id}
                   >
                     <Trash2 size={16} />
                   </button>
                 </div>
 
                 <p>{review.comment}</p>
-                <small>{review.date}</small>
+                <small>
+                  {review.created_at
+                    ? new Date(review.created_at).toLocaleDateString()
+                    : ''}
+                </small>
               </div>
             ))}
           </div>
@@ -582,14 +1002,46 @@ function Dashboard() {
       </div>
 
       <section className="kd-panel">
-        <div className="kd-empty">
-          <CreditCard size={38} />
-          <h3>No payment records</h3>
-          <p>
-            This is a frontend demo. No real payments have been collected
-            or processed.
-          </p>
-        </div>
+        {paymentsLoading ? (
+          <div className="kd-empty">
+            <CreditCard size={38} />
+            <h3>Loading payments...</h3>
+          </div>
+        ) : paymentsError ? (
+          <div className="kd-empty">
+            <CreditCard size={38} />
+            <h3>Unable to load payments</h3>
+            <p>{paymentsError}</p>
+          </div>
+        ) : payments.length > 0 ? (
+          <div className="kd-review-list">
+            {payments.map((payment) => (
+              <div className="kd-review-card" key={payment.id}>
+                <div className="kd-panel-heading">
+                  <div>
+                    <h3>{payment.library_name}</h3>
+                    <p>{payment.plan_name} Membership</p>
+                  </div>
+                  <span className="kd-status">
+                    {payment.status}
+                  </span>
+                </div>
+
+                <p><strong>Amount:</strong> ₹{payment.amount}</p>
+                <p><strong>Transaction ID:</strong> {payment.transaction_id}</p>
+                <small>
+                  {new Date(payment.created_at).toLocaleString()}
+                </small>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="kd-empty">
+            <CreditCard size={38} />
+            <h3>No payment records</h3>
+            <p>Your payment transactions will appear here.</p>
+          </div>
+        )}
       </section>
     </>
   )
@@ -796,6 +1248,7 @@ function Dashboard() {
   const sectionContent = {
     Overview: renderOverview,
     'My Membership': renderMembership,
+    'My Bookings': renderBookings,
     'Saved Libraries': renderSavedLibraries,
     'My Reviews': renderReviews,
     'Payment History': renderPayments,
