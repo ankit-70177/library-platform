@@ -327,3 +327,11 @@ The home page currently uses hardcoded sample library values. Any sample occupan
 - Open pull requests against the default branch, describe scope and verification, and request the repository's normal review.
 - Keep dependencies in their owning package. Do not commit `node_modules/`, build output, `.env` files, credentials, or secrets.
 - Run relevant package build commands before submitting changes and report any checks that could not be run.
+
+## Current Backend Implementation
+
+The backend has progressed beyond the initial health-check foundation. It includes route and controller modules for authentication, owners, libraries, and library discovery.
+
+The PostgreSQL connection is configured in the backend, but running the database-dependent APIs requires a reachable PostgreSQL server and valid database environment variables.
+
+The health endpoint remains available at `GET /api/health`.
