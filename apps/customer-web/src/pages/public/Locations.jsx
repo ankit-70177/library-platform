@@ -233,7 +233,7 @@ function Locations() {
 
                       <Link
                         className="directory-cta"
-                        to={`/register?library=${library.id}`}
+                        to={localStorage.getItem('kitaab-auth-token') ? `/dashboard?library=${library.id}` : `/register?library=${library.id}`}
                       >
                         Choose this space
                         <ArrowRight size={17} aria-hidden="true" />

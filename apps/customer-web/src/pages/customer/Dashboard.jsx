@@ -314,7 +314,17 @@ function Dashboard() {
 
   const [notice, setNotice] = useState('')
 
-  const selectedLibrary = user?.libraryId
+  const activeSubscription = subscriptions.find((sub) => sub.status === 'active')
+
+  const selectedLibrary = activeSubscription
+    ? {
+        name: activeSubscription.library_name,
+        area: activeSubscription.library_city,
+        price: activeSubscription.price,
+        plan: activeSubscription.plan_name,
+        status: activeSubscription.status,
+      }
+    : user?.libraryId
     ? sampleLibraries.find(
         (library) => library.id === Number(user.libraryId)
       )
@@ -545,9 +555,13 @@ function Dashboard() {
                 <p>
                   <MapPin size={13} /> {selectedLibrary.area}
                 </p>
-                <p>Starting at ₹{selectedLibrary.price}/month</p>
-                <span className="kd-status">
-                  {membershipState === 'active' ? 'Active selection' : 'Cancelled'}
+                <p>
+                  {selectedLibrary.plan
+                    ? `Plan: ${selectedLibrary.plan} (₹${selectedLibrary.price})`
+                    : `Starting at ₹${selectedLibrary.price}/month`}
+                </p>
+                <span className={`kd-status ${selectedLibrary.status === 'cancelled' ? 'cancelled' : ''}`}>
+                  {selectedLibrary.status || (membershipState === 'active' ? 'Active selection' : 'Cancelled')}
                 </span>
               </div>
             </div>

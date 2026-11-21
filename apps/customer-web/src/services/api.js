@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:5001/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api';
 
 export const apiRequest = async (endpoint, options = {}) => {
   const token = localStorage.getItem('kitaab-auth-token');
@@ -13,7 +13,7 @@ export const apiRequest = async (endpoint, options = {}) => {
     },
   });
 
-  const data = await response.json();
+  const data = await response.json().catch(() => ({}));
 
   if (response.status === 401) {
     localStorage.removeItem('kitaab-auth-token');
@@ -84,3 +84,27 @@ export const removeMySavedLibrary = (libraryId) =>
 
 export const getApprovedLibraries = () =>
   apiRequest('/discovery/libraries?limit=50');
+
+export const getApprovedLibraryById = (id) =>
+  apiRequest(`/discovery/libraries/${id}`);
+
+export const getMembershipPlans = () =>
+  apiRequest('/subscriptions/plans');
+
+export const subscribeToLibrary = (libraryId, planId) =>
+  apiRequest('/subscriptions', {
+    method: 'POST',
+    body: JSON.stringify({ library_id: Number(libraryId), plan_id: Number(planId) }),
+  });
+
+export const createBooking = (bookingData) =>
+  apiRequest('/bookings', {
+    method: 'POST',
+    body: JSON.stringify(bookingData),
+  });
+
+export const createPayment = (paymentData) =>
+  apiRequest('/payments', {
+    method: 'POST',
+    body: JSON.stringify(paymentData),
+  });

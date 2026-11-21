@@ -86,5 +86,18 @@ export const rejectAdminLibrary = (id) =>
     method: 'PATCH',
   })
 
+export const getAdminOwnerApplications = () =>
+  apiRequest('/owners/applications')
+
+export const approveAdminOwnerApplication = (id) =>
+  apiRequest(`/owners/applications/${id}/approve`, {
+    method: 'PATCH',
+  })
+
+export const rejectAdminOwnerApplication = (id) =>
+  apiRequest(`/owners/applications/${id}/reject`, {
+    method: 'PATCH',
+  })
+
 export const getAdminDashboard = () =>
   apiRequest('/admin/dashboard')
