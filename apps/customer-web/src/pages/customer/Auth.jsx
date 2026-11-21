@@ -83,7 +83,7 @@ function Auth({ mode }) {
         console.error('Failed to parse incoming authentication handoff', err)
       }
     }
-  }, [location.search, navigate])
+  }, [location.pathname, location.search, navigate])
 
   const handleFillDemo = (roleKey) => {
     const config = ROLE_CONFIG[roleKey]

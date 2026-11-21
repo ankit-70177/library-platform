@@ -73,6 +73,9 @@ function Dashboard() {
   const [bookingsLoading, setBookingsLoading] = useState(true)
   const [bookingsError, setBookingsError] = useState('')
   const [bookingActionLoading, setBookingActionLoading] = useState(null)
+  const [reviews, setReviews] = useState([])
+  const [reviewsLoading, setReviewsLoading] = useState(true)
+  const [reviewsError, setReviewsError] = useState('')
 
 
   useEffect(() => {
@@ -237,7 +240,7 @@ function Dashboard() {
   const [section, setSection] = useState('Overview')
   const [mobileMenu, setMobileMenu] = useState(false)
 
-  const [membershipState, setMembershipState] = useState(
+  const [membershipState] = useState(
     () => window.localStorage.getItem('kitaab-demo-membership') || 'active'
   )
 
@@ -302,9 +305,6 @@ function Dashboard() {
     city: user?.city || 'Sonipat'
   }))
 
-  const [reviews, setReviews] = useState([])
-  const [reviewsLoading, setReviewsLoading] = useState(true)
-  const [reviewsError, setReviewsError] = useState('')
   const [reviewActionLoading, setReviewActionLoading] = useState(false)
   const [deletingReviewId, setDeletingReviewId] = useState(null)
 
@@ -377,17 +377,6 @@ function Dashboard() {
     } finally {
       setBookingActionLoading(null)
     }
-  }
-
-  const updateMembership = (nextState) => {
-    window.localStorage.setItem('kitaab-demo-membership', nextState)
-    setMembershipState(nextState)
-
-    setNotice(
-      nextState === 'cancelled'
-        ? 'Your demo membership selection has been cancelled.'
-        : 'Your demo membership selection is active again.'
-    )
   }
 
   const toggleSavedLibrary = async (libraryId) => {
@@ -512,7 +501,16 @@ function Dashboard() {
         </Link>
       </div>
 
-      <div className="kd-stats-grid">
+      {dashboardLoading ? (
+        <p className="kd-demo-note" role="status">
+          Loading your dashboard...
+        </p>
+      ) : dashboardError ? (
+        <p className="kd-demo-note" role="alert">
+          {dashboardError}
+        </p>
+      ) : (
+        <div className="kd-stats-grid">
         <div className="kd-stat-card">
           <span>My Membership</span>
           <h3>{dashboardData?.statistics?.subscriptions?.active ?? 0}</h3>
@@ -536,7 +534,8 @@ function Dashboard() {
           <h3>{activeNotifications}</h3>
           <p>Unread notifications</p>
         </div>
-      </div>
+        </div>
+      )}
 
       <div className="kd-content-grid">
         <section className="kd-panel">
