@@ -10,6 +10,7 @@ const allowedFields = [
   'phone',
   'opening_hours',
   'total_seats',
+  'available_seats',
   'facilities',
   'photos',
 ]
@@ -103,6 +104,21 @@ export const validateLibrary = (data, isUpdate = false) => {
     (!Number.isInteger(data.total_seats) || data.total_seats < 0)
   ) {
     return 'Total seats must be a non-negative integer.'
+  }
+
+  if (
+    'available_seats' in data &&
+    (!Number.isInteger(data.available_seats) || data.available_seats < 0)
+  ) {
+    return 'Available seats must be a non-negative integer.'
+  }
+
+  if (
+    'total_seats' in data &&
+    'available_seats' in data &&
+    data.available_seats > data.total_seats
+  ) {
+    return 'Available seats cannot exceed total seats.'
   }
 
   if (

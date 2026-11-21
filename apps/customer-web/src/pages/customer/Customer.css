@@ -1,8 +1,92 @@
 .customer-page { min-height: 65vh; padding: 64px max(22px, calc((100vw - 1200px) / 2)) 95px; background: #fbf9f4; font-family: 'Inter', Arial, sans-serif; }
 .auth-page { display: grid; grid-template-columns: minmax(380px, .85fr) 1fr; gap: 60px; align-items: stretch; }
 .auth-card { width: min(100%, 480px); margin: auto; padding: 30px 0; }
-.auth-card h1 { margin: 0 0 14px; font: 500 clamp(36px, 5vw, 56px)/1.08 'Lora', Georgia, serif; letter-spacing: -.035em; }
-.auth-intro { margin-bottom: 27px; color: #55514b; font-size: 14px; line-height: 1.6; }
+.auth-card h1 { margin: 0 0 10px; font: 500 clamp(32px, 4vw, 44px)/1.1 'Lora', Georgia, serif; letter-spacing: -.03em; }
+.auth-intro { margin-bottom: 20px; color: #55514b; font-size: 14px; line-height: 1.5; }
+
+/* Unified Role Selector */
+.auth-role-selector {
+  display: flex;
+  background: #edf1ec;
+  border-radius: 9px;
+  padding: 4px;
+  margin-bottom: 14px;
+  gap: 4px;
+}
+
+.auth-role-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 8px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #4b5e52;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.auth-role-tab:hover {
+  color: #244735;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.auth-role-tab.active {
+  background: #244735;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(36, 71, 53, 0.18);
+}
+
+.auth-role-desc {
+  color: #647368;
+  font-size: 12px;
+  line-height: 1.5;
+  margin-bottom: 18px;
+  min-height: 36px;
+  padding: 8px 12px;
+  background: #f7f9f6;
+  border-radius: 6px;
+  border-left: 3px solid #315c45;
+}
+
+.auth-demo-pill {
+  margin-top: 16px;
+  padding: 12px 14px;
+  background: #edf4ee;
+  border: 1px solid #c8ddce;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #1e5c35;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.auth-demo-pill button {
+  padding: 6px 12px;
+  background: #315c45;
+  color: white;
+  border: 0;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.auth-demo-pill button:hover {
+  background: #244735;
+}
+
 .auth-card form { display: grid; gap: 16px; }
 .auth-card label { display: grid; gap: 7px; font-size: 12px; font-weight: 500; }
 .auth-card input { height: 50px; padding: 0 13px; border: 1px solid #c6c0b7; border-radius: 2px; background: white; font-size: 14px; }

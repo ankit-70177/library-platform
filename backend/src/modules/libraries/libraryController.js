@@ -13,6 +13,7 @@ const libraryFields = [
   'phone',
   'opening_hours',
   'total_seats',
+  'available_seats',
   'facilities',
   'photos',
 ]
@@ -44,9 +45,22 @@ export const createLibrary = async (req, res) => {
       phone,
       opening_hours,
       total_seats = 0,
+      available_seats,
       facilities = [],
       photos = [],
     } = req.body
+
+    const parsedTotal = Number.isInteger(total_seats) ? total_seats : 0
+    const parsedAvailable =
+      available_seats !== undefined && Number.isInteger(available_seats)
+        ? available_seats
+        : parsedTotal
+
+    if (parsedAvailable > parsedTotal) {
+      return res.status(400).json({
+        message: 'Available seats cannot exceed total seats.',
+      })
+    }
 
     const result = await pool.query(
       `INSERT INTO libraries (
@@ -56,7 +70,7 @@ export const createLibrary = async (req, res) => {
       )
       VALUES (
         $1, $2, $3, $4, $5, $6, $7, $8,
-        $9, $10, $11, $11, $12, $13
+        $9, $10, $11, $12, $13, $14
       )
       RETURNING *`,
       [
@@ -70,7 +84,8 @@ export const createLibrary = async (req, res) => {
         longitude ?? null,
         phone ?? null,
         opening_hours ?? {},
-        total_seats,
+        parsedTotal,
+        parsedAvailable,
         facilities,
         photos,
       ]
