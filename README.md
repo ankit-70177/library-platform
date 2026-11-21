@@ -290,23 +290,30 @@ The API listens on port `5001` by default. Use `npm start` to run without watch 
 
 ## Environment variables
 
-| Package | Variable | Purpose | Current use |
-| --- | --- | --- | --- |
-| Customer | `VITE_API_BASE_URL` | Shared backend API base URL | Reserved; no API service calls yet |
-| Customer | `VITE_OWNER_APP_URL` | Owner app entry point | Used by the Owner Login link |
-| Owner | `VITE_API_BASE_URL` | Shared backend API base URL | Reserved; no API service calls yet |
-| Owner | `VITE_CUSTOMER_APP_URL` | Customer site URL | Used by the customer site link |
-| Backend | `PORT` | HTTP server port | Used; defaults to `5001` |
+| Package | Variable | Purpose |
+| --- | --- | --- |
+| Customer | `VITE_API_BASE_URL` | Backend API base URL |
+| Customer | `VITE_OWNER_APP_URL` | Owner application URL |
+| Owner | `VITE_API_BASE_URL` | Backend API base URL |
+| Owner | `VITE_CUSTOMER_APP_URL` | Customer application URL |
+| Backend | `PORT` | HTTP server port; defaults to `5001` |
+| Backend | `DB_HOST` | PostgreSQL host |
+| Backend | `DB_PORT` | PostgreSQL port; defaults to `5432` |
+| Backend | `DB_NAME` | PostgreSQL database name |
+| Backend | `DB_USER` | PostgreSQL username |
+| Backend | `DB_PASSWORD` | PostgreSQL password; optional in the current connection configuration |
 
-Never commit real `.env` files, credentials, or secrets. `.env.example` files contain non-secret local defaults.
+Copy each package's `.env.example` to `.env` and replace database placeholders with your local PostgreSQL settings. Never commit real `.env` files or credentials.
 
 ## Current implementation status
 
-- **Implemented:** existing customer-facing prototype relocated under `apps/customer-web/`; its home page, sample library cards, navigation, footer, and styles remain. The Home, Locations, Events, and About pages provide the initial branded public experience. Public routes include Home, Locations, Events, and About. A separate owner React/Vite app shell exists. The Express server exposes `GET /api/health`.
-- **Structure prepared:** independent customer and owner applications, feature-oriented frontend folders, backend module folders, environment examples, and per-package scripts/lockfiles.
-- **Planned, not implemented:** real location selection/search, API-backed listings, authentication and authorization, owner onboarding and dashboard, platform approval, PostgreSQL integration, seat management, memberships, payment processing, reviews, notifications, analytics, maps, image storage, and admin tooling.
+- **Customer application:** React/Vite application with public pages, authentication screens, dashboard features, and API service functions.
+- **Owner application:** Separate React/Vite application with owner dashboard and library-management features.
+- **Backend:** Express application with registered route groups for authentication, owners, libraries, saved libraries, discovery, subscriptions, bookings, payments, reviews, customer dashboard, owner dashboard, and admin dashboard.
+- **Database:** PostgreSQL connection configuration, schema definition, and six numbered SQL migration files are present.
+- **Health check:** `GET /api/health` is registered.
 
-The home page currently uses hardcoded sample library values. Any sample occupancy is static and must not be interpreted as real-time availability. No login or signup flow is working. No PostgreSQL connection is present.
+The presence of routes, controllers, frontend screens, or migration files does not by itself confirm that every end-to-end workflow has been tested. A reachable PostgreSQL database and valid environment settings are required to run the database-dependent backend.
 
 ## Future development roadmap
 
@@ -328,10 +335,10 @@ The home page currently uses hardcoded sample library values. Any sample occupan
 - Keep dependencies in their owning package. Do not commit `node_modules/`, build output, `.env` files, credentials, or secrets.
 - Run relevant package build commands before submitting changes and report any checks that could not be run.
 
-## Current Backend Implementation
+## Backend implementation details
 
-The backend has progressed beyond the initial health-check foundation. It includes route and controller modules for authentication, owners, libraries, and library discovery.
+The backend uses Express and PostgreSQL. Route groups are registered under `/api`, including authentication, owner applications, library management and discovery, saved libraries, subscriptions, bookings, payments, reviews, and customer, owner, and administrator dashboards.
 
-The PostgreSQL connection is configured in the backend, but running the database-dependent APIs requires a reachable PostgreSQL server and valid database environment variables.
+Database-related files are located under `backend/src/config/`, including `schema.sql` and numbered SQL migrations. The database connection is configured through the environment variables listed above.
 
-The health endpoint remains available at `GET /api/health`.
+The backend startup process checks the PostgreSQL connection before listening for HTTP requests. Configure a reachable database before starting the server.
