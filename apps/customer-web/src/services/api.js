@@ -91,12 +91,6 @@ export const getApprovedLibraryById = (id) =>
 export const getMembershipPlans = () =>
   apiRequest('/subscriptions/plans');
 
-export const subscribeToLibrary = (libraryId, planId) =>
-  apiRequest('/subscriptions', {
-    method: 'POST',
-    body: JSON.stringify({ library_id: Number(libraryId), plan_id: Number(planId) }),
-  });
-
 export const createBooking = (bookingData) =>
   apiRequest('/bookings', {
     method: 'POST',
