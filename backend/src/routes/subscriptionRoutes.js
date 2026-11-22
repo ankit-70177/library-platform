@@ -3,9 +3,7 @@ import express from 'express'
 import {
   getPlans,
   createPlan,
-  createSubscription,
   getMySubscriptions,
-  renewSubscription,
   cancelSubscription,
   getOwnerSubscriptions,
   getAllSubscriptions,
@@ -30,12 +28,6 @@ router.post(
 )
 
 // Customer: Create and view subscriptions
-router.post(
-  '/',
-  authorizeRole('customer'),
-  createSubscription
-)
-
 router.get(
   '/my',
   authorizeRole('customer'),
@@ -43,12 +35,6 @@ router.get(
 )
 
 // Customer: Renew or cancel a subscription
-router.patch(
-  '/:id/renew',
-  authorizeRole('customer'),
-  renewSubscription
-)
-
 router.patch(
   '/:id/cancel',
   authorizeRole('customer'),
