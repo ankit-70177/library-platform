@@ -1,8 +1,8 @@
 # Library Platform
 
-A location-first discovery and membership platform that connects students and other customers with study libraries and their owners. Customers can explore public listings; library owners will use a separate application to publish and manage their listings. Both applications are designed to use one shared API.
+A location-first discovery and membership platform that connects students and other customers with study libraries and their owners. Customers can explore public listings and owners can manage their listings in role-specific routes in one web application. Both experiences use one shared API.
 
-This is **not** a library inventory, book lending, or book issuing system. The current repository establishes the application structure and a small API foundation. Most product capabilities described below are planned and are not implemented yet.
+This is **not** a library inventory, book lending, or book issuing system. The repository includes customer and owner/admin experiences, a shared API, and a PostgreSQL schema. Some product capabilities are implemented while others remain planned or partial.
 
 ## Problem statement
 
@@ -12,8 +12,8 @@ Finding a suitable study library often means searching scattered listings or vis
 
 - Let visitors discover study libraries by city, locality, and area without requiring an account.
 - Give customers a dedicated experience for memberships, subscriptions, saved libraries, reviews, and account details.
-- Give owners a separate application for onboarding and managing their library listings.
-- Use one backend API as the shared source of truth for both applications.
+- Give owners a dedicated route group for onboarding and managing their library listings.
+- Use one backend API as the shared source of truth for customer and owner workflows.
 - Keep platform administrator permissions separate from library-owner permissions.
 - Build a maintainable foundation without implementing product workflows prematurely.
 
@@ -21,27 +21,26 @@ Finding a suitable study library often means searching scattered listings or vis
 
 The public customer application is the main entry point. A visitor chooses a location, browses and compares public library listings, and can view a library profile without signing in. Account access is intended only when the visitor wants to take an account-specific action, such as purchasing a membership, saving a library, or writing a review.
 
-The customer website provides an **Owner Login** link to the distinct owner application. Owners will register or sign in there, submit library details for review, and manage their own listings after approval. Platform administrators review listings and supervise platform activity through administrator capabilities; a third administrator frontend is outside the current scope.
+The customer website provides an **Owner Login** link to `/owner/login`. Owners register or sign in there, submit library details for review, and manage their own listings after approval. Platform administrators use the administrator workspace at `/owner/dashboard`.
 
 ## Application architecture
 
-There are two independent React applications and one shared Node.js/Express REST API:
+There is one React application with separate role-based route groups and one shared Node.js/Express REST API:
 
-- **Customer web** (`apps/customer-web/`): public discovery and future customer account journeys.
-- **Owner web** (`apps/owner-web/`): separate owner entry point and future listing management workflows.
-- **Backend** (`backend/`): shared API boundary. Currently it exposes only a health endpoint.
-- **Database**: PostgreSQL is the intended relational database. No database package, schema, connection, or integration is configured yet.
+- **Web app** (`apps/customer-web/`): public discovery and customer account journeys, plus the owner and administrator portal under `/owner/*`.
+- **Backend** (`backend/`): shared Node.js/Express API for customer, owner, and administrator workflows.
+- **Database**: PostgreSQL schema, connection configuration, and migrations are present.
 
-The separate frontends allow each user group to have its own navigation, pages, and eventual access controls. This separation alone is not authorization: the backend must enforce role-based permissions when account features are implemented. The platform administrator remains a separate role and is not granted owner permissions by default.
+The route groups give each user group its own pages and navigation while sharing the frontend runtime and API client. This separation alone is not authorization: the backend enforces role-based permissions for protected data and actions. The platform administrator remains a separate role and is not granted owner permissions by default.
 
 ```mermaid
 flowchart LR
   Visitor[Customer or visitor] --> Customer[Customer React app]
-  Owner[Library owner] --> OwnerApp[Owner React app]
+  Owner[Library owner] --> OwnerApp[Owner routes at /owner]
   Customer -->|REST API| API[Node.js and Express API]
   OwnerApp -->|REST API| API
   API -->|planned| DB[(PostgreSQL)]
-  Admin[Platform administrator] -. separate role and future admin tooling .-> API
+  Admin[Platform administrator] --> OwnerApp
 ```
 
 ## Customer application
@@ -56,9 +55,9 @@ The customer application is public-facing and serves as the main discovery entry
 
 The customer app presents Kitaab as the location-first entry point with Home, Locations, Events, and About pages, a responsive navigation/footer, an editorial photo hero, and textured discovery sections. The location search and listing cards are a local sample prototype. The sample data and displayed availability are static prototype content; search is not connected to the API and availability is not live.
 
-## Library-owner application
+## Owner portal
 
-The owner application is a separate React application with its own URL, package manifest, and experience. Owners will not manage libraries inside the customer dashboard. Planned capabilities include:
+The owner portal has its own route group and experience inside the shared React application. Owners will not manage libraries inside the customer dashboard. Planned capabilities include:
 
 - Owner registration, login, logout, profile, and dashboard.
 - Library onboarding with name, description, address, location, photos, facilities, hours, rules, capacity, and membership plans.
@@ -68,11 +67,11 @@ The owner application is a separate React application with its own URL, package 
 - Views of members, active memberships, expiry dates, membership history, and payment records.
 - Reviews, ratings, listing performance, membership and occupancy statistics, and upcoming renewals.
 
-The current owner app is a minimal shell that makes the application independently runnable. Registration, onboarding, dashboards, and management actions are not implemented.
+The owner routes provide sign-in and owner-application flows, plus owner and administrator dashboards. Some product workflows remain incomplete.
 
 ## Platform administrator responsibilities
 
-Platform administrators are distinct from library owners. Planned responsibilities include approving, rejecting, or requesting corrections for listings; verifying submitted information; managing customer and owner accounts; suspending inappropriate accounts or listings; moderating reviews and reports; monitoring transactions; viewing platform-wide statistics; and maintaining an audit trail. No administrator frontend or admin workflows are implemented in this task.
+Platform administrators are distinct from library owners. Planned responsibilities include approving, rejecting, or requesting corrections for listings; verifying submitted information; managing customer and owner accounts; suspending inappropriate accounts or listings; moderating reviews and reports; monitoring transactions; viewing platform-wide statistics; and maintaining an audit trail. An initial admin dashboard and listing/application review flows are in the owner portal route group.
 
 ## Customer journey
 
@@ -90,7 +89,7 @@ flowchart TD
   Purchase --> Subscription[View active subscription]
   Subscription --> Account[Customer dashboard]
   Open --> OwnerEntry[Owner Login]
-  OwnerEntry --> OwnerApp[Separate owner application]
+  OwnerEntry --> OwnerApp[Owner portal at /owner]
 ```
 
 ## Owner journey
@@ -98,7 +97,7 @@ flowchart TD
 ```mermaid
 flowchart TD
   Visit[Open customer website] --> Entry[Select Owner Login]
-  Entry --> App[Open separate owner application]
+  Entry --> App[Open /owner portal]
   App --> Auth[Owner registers or logs in]
   Auth --> Onboard[Enter library details and plans]
   Onboard --> Submit[Submit listing for verification]
@@ -153,16 +152,15 @@ At first, owners are expected to update capacity and available or occupied seats
 
 ## High-level technical architecture
 
-Both frontends will call the same REST API using their respective `VITE_API_BASE_URL` setting. The backend will own authentication and authorization, listing approval, subscription records, payment verification, and other authoritative business rules. PostgreSQL is the intended relational store, but is not connected or configured. Payment gateway, image storage, email/notification delivery, and maps/geolocation are planned integrations for later work.
+The web application calls one REST API using `VITE_API_BASE_URL`. The backend owns authentication and authorization, listing approval, subscription records, payment verification, and other authoritative business rules. PostgreSQL is the relational store for the local setup. Payment gateway, image storage, email/notification delivery, and maps/geolocation are planned integrations for later work.
 
 ## Technology stack
 
 | Area | Current foundation / direction |
 | --- | --- |
-| Customer frontend | React, Vite, JavaScript, React Router |
-| Owner frontend | React, Vite, JavaScript, React Router dependency included |
+| Web frontend | React, Vite, JavaScript, React Router; customer and owner route groups |
 | Backend | Node.js, Express.js, REST API |
-| Database | PostgreSQL intended; not configured |
+| Database | PostgreSQL |
 | Future integrations | India-suitable payment gateway, image storage, email/notifications, maps/geolocation; not implemented |
 
 There is no AI, RAG, chatbot, vector database, or AI-specific architecture in this project.
@@ -176,10 +174,8 @@ library-platform/
 │   │   ├── public/
 │   │   ├── src/
 │   │   │   ├── assets/
-│   │   │   ├── components/{common,layout,library}/
-│   │   │   ├── features/{authentication,discovery,location,reviews,subscriptions}/
-│   │   │   ├── hooks/
-│   │   │   ├── pages/{authentication,public}/
+│   │   │   ├── components/{layout,owner}/
+│   │   │   ├── pages/{customer,owner,public}/
 │   │   │   ├── services/
 │   │   │   ├── styles/
 │   │   │   ├── App.jsx
@@ -187,12 +183,6 @@ library-platform/
 │   │   ├── .env.example
 │   │   ├── package.json / package-lock.json
 │   │   └── vite.config.js
-│   └── owner-web/
-│       ├── public/
-│       ├── src/{assets,components,features,hooks,pages,services,styles}/
-│       ├── .env.example
-│       ├── package.json / package-lock.json
-│       └── vite.config.js
 ├── backend/
 │   ├── src/{config,middleware,modules,routes,utils}/
 │   │   ├── app.js
@@ -204,11 +194,11 @@ library-platform/
 └── README.md
 ```
 
-`components/` holds reusable UI, `features/` groups feature-specific code, `pages/` maps route-level views, and `services/` is the future API integration boundary. Backend `modules/` groups domain capabilities; `routes/` will connect HTTP endpoints to module logic; `middleware/`, `config/`, and `utils/` hold cross-cutting concerns. Empty folders are retained with `.gitkeep` until real code is added. The two frontend packages remain independent; no root package manager, Nx, or Turborepo is introduced.
+`components/` holds reusable UI, `pages/` maps route-level views, and `services/` contains the shared API client. Backend `modules/` groups domain capabilities; `routes/` connect HTTP endpoints to module logic; `middleware/`, `config/`, and `utils/` hold cross-cutting concerns. Customer and owner pages share one frontend package; the API remains an independent backend service.
 
 ## Planned backend modules
 
-The module directories mark future areas only: `auth`, `users`, `owners`, `libraries`, `subscriptions`, `payments`, `reviews`, and `notifications`. No controllers, domain services, database models, or feature endpoints have been added. The current backend contains the Express app/server and `GET /api/health` only.
+Backend modules cover authentication, owner workflows, libraries, discovery, subscriptions, bookings, payments, reviews, and dashboards. The route groups are registered under `/api`; the health endpoint reports API and database availability.
 
 ## Planned database entities and relationships
 
@@ -226,7 +216,7 @@ Foreign keys, uniqueness rules, lifecycle constraints, and privacy requirements 
 
 ## Planned API areas
 
-Only `GET /api/health` exists today. Future REST API areas may include:
+The API currently includes:
 
 - Public library discovery, filters, location lookup, and library profiles.
 - Customer and owner authentication, profiles, and role-aware account access.
@@ -237,7 +227,7 @@ Only `GET /api/health` exists today. Future REST API areas may include:
 
 ## Local development setup
 
-Requirements: Node.js and npm compatible with the installed Vite version. Each application and the backend has its own dependencies and lockfile; run package commands from that package directory. No root-level scripts are defined.
+Requirements: Node.js and npm compatible with the installed Vite version. The web app and backend each have their own dependencies and lockfile; run package commands from that package directory. No root-level scripts are defined.
 
 1. Clone the repository and enter it:
 
@@ -246,19 +236,20 @@ Requirements: Node.js and npm compatible with the installed Vite version. Each a
    cd library-platform
    ```
 
-2. Install each package separately:
+2. Install the web app and backend dependencies:
 
    ```bash
    cd apps/customer-web && npm ci
-   cd ../owner-web && npm ci
    cd ../../backend && npm ci
    ```
 
    Alternatively, return to the repository root between each directory to avoid ambiguity.
 
-3. Copy the relevant `.env.example` file to `.env` in each package if you need to change the local defaults. The current health endpoint only reads `PORT`; the frontends do not yet call the API.
+3. Copy the relevant `.env.example` file to `.env` and set the database connection and authentication secret for your local environment.
 
-### Run the customer frontend
+   For local login, set `JWT_SECRET` in `backend/.env` to a private random value. After applying the database schema and migrations, run `cd backend && npm run seed:demo` to create the demo customer, owner, and admin accounts shown on the login screens. The demo seed script refuses to run when `NODE_ENV=production`.
+
+### Run the web app
 
 ```bash
 cd apps/customer-web
@@ -266,17 +257,7 @@ cp .env.example .env
 npm run dev
 ```
 
-Vite prints the local URL (normally `http://localhost:5173`). `VITE_OWNER_APP_URL` points to the owner frontend and defaults to `http://localhost:5174`.
-
-### Run the owner frontend
-
-```bash
-cd apps/owner-web
-cp .env.example .env
-npm run dev
-```
-
-The owner app uses port `5174` by default. `VITE_CUSTOMER_APP_URL` points back to the customer website.
+Vite serves customer routes and owner routes at `http://localhost:5173`. Open `/owner/login`, `/owner/apply`, or `/owner/dashboard` for the owner portal. Requests to `/api` are proxied to the backend on port `5001`, so the browser uses one origin during development.
 
 ### Run the backend
 
@@ -288,27 +269,28 @@ npm run dev
 
 The API listens on port `5001` by default. Use `npm start` to run without watch mode. The current health endpoint is `GET http://localhost:5001/api/health`.
 
+For production, serve the built web app on the public domain and route `/api/*` to the Express service behind the same domain. Configure the web host to send browser routes such as `/owner/dashboard` to the SPA entry point.
+
 ## Environment variables
 
 | Package | Variable | Purpose |
 | --- | --- | --- |
 | Customer | `VITE_API_BASE_URL` | Backend API base URL |
-| Customer | `VITE_OWNER_APP_URL` | Owner application URL |
-| Owner | `VITE_API_BASE_URL` | Backend API base URL |
-| Owner | `VITE_CUSTOMER_APP_URL` | Customer application URL |
+| Web app | `VITE_API_BASE_URL` | Backend API base URL |
 | Backend | `PORT` | HTTP server port; defaults to `5001` |
+| Backend | `JWT_SECRET` | Secret used to sign and verify login tokens; required to start the API |
 | Backend | `DB_HOST` | PostgreSQL host |
 | Backend | `DB_PORT` | PostgreSQL port; defaults to `5432` |
 | Backend | `DB_NAME` | PostgreSQL database name |
 | Backend | `DB_USER` | PostgreSQL username |
 | Backend | `DB_PASSWORD` | PostgreSQL password; optional in the current connection configuration |
 
-Copy each package's `.env.example` to `.env` and replace database placeholders with your local PostgreSQL settings. Never commit real `.env` files or credentials.
+Copy each package's `.env.example` to `.env` and replace database placeholders with your local PostgreSQL settings. Change the example `JWT_SECRET` to a private random value before deployment. Never commit real `.env` files or credentials.
 
 ## Current implementation status
 
 - **Customer application:** React/Vite application with public pages, authentication screens, dashboard features, and API service functions.
-- **Owner application:** Separate React/Vite application with owner dashboard and library-management features.
+- **Owner portal:** Owner sign-in/application and owner/admin dashboards under `/owner/*` in the shared React/Vite application.
 - **Backend:** Express application with registered route groups for authentication, owners, libraries, saved libraries, discovery, subscriptions, bookings, payments, reviews, customer dashboard, owner dashboard, and admin dashboard.
 - **Database:** PostgreSQL connection configuration, schema definition, and six numbered SQL migration files are present.
 - **Health check:** `GET /api/health` is registered.

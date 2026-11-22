@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 export const apiRequest = async (endpoint, options = {}) => {
   const token = localStorage.getItem('kitaab-auth-token');
@@ -15,10 +15,12 @@ export const apiRequest = async (endpoint, options = {}) => {
 
   const data = await response.json().catch(() => ({}));
 
-  if (response.status === 401) {
+  if (response.status === 401 && endpoint !== '/auth/login') {
     localStorage.removeItem('kitaab-auth-token');
     localStorage.removeItem('kitaab-demo-user');
-    window.location.href = '/login';
+    window.location.href = window.location.pathname.startsWith('/owner')
+      ? '/owner/login'
+      : '/login';
     throw new Error('Session expired. Please log in again.');
   }
 
@@ -28,6 +30,61 @@ export const apiRequest = async (endpoint, options = {}) => {
 
   return data;
 };
+
+export const loginUser = (credentials) =>
+  apiRequest('/auth/login', {
+    method: 'POST',
+    body: JSON.stringify(credentials),
+  });
+
+export const applyAsOwner = (applicationData) =>
+  apiRequest('/owners/apply', {
+    method: 'POST',
+    body: JSON.stringify(applicationData),
+  });
+
+export const getCurrentUser = () => apiRequest('/auth/me');
+
+export const getOwnerDashboard = () => apiRequest('/owner/dashboard');
+
+export const getMyLibraries = () => apiRequest('/libraries/my');
+
+export const getLibraryById = (id) => apiRequest(`/libraries/${id}`);
+
+export const createLibrary = (libraryData) =>
+  apiRequest('/libraries', {
+    method: 'POST',
+    body: JSON.stringify(libraryData),
+  });
+
+export const updateLibrary = (id, libraryData) =>
+  apiRequest(`/libraries/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(libraryData),
+  });
+
+export const deleteLibrary = (id) =>
+  apiRequest(`/libraries/${id}`, { method: 'DELETE' });
+
+export const getAdminPendingLibraries = () =>
+  apiRequest('/libraries/admin/pending');
+
+export const approveAdminLibrary = (id) =>
+  apiRequest(`/libraries/admin/${id}/approve`, { method: 'PATCH' });
+
+export const rejectAdminLibrary = (id) =>
+  apiRequest(`/libraries/admin/${id}/reject`, { method: 'PATCH' });
+
+export const getAdminOwnerApplications = () =>
+  apiRequest('/owners/applications');
+
+export const approveAdminOwnerApplication = (id) =>
+  apiRequest(`/owners/applications/${id}/approve`, { method: 'PATCH' });
+
+export const rejectAdminOwnerApplication = (id) =>
+  apiRequest(`/owners/applications/${id}/reject`, { method: 'PATCH' });
+
+export const getAdminDashboard = () => apiRequest('/admin/dashboard');
 
 export const getCustomerDashboard = () =>
   apiRequest('/customer/dashboard');

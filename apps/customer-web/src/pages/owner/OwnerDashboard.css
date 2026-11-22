@@ -974,7 +974,7 @@
 }
 
 /* Unified Role Selector */
-.auth-role-selector {
+.owner-auth-container .auth-role-selector {
   display: flex;
   background: #edf1ec;
   border-radius: 9px;
@@ -983,7 +983,7 @@
   gap: 4px;
 }
 
-.auth-role-tab {
+.owner-auth-container .auth-role-tab {
   flex: 1;
   display: flex;
   align-items: center;
@@ -1001,18 +1001,18 @@
   white-space: nowrap;
 }
 
-.auth-role-tab:hover {
+.owner-auth-container .auth-role-tab:hover {
   color: #244735;
   background: rgba(255, 255, 255, 0.7);
 }
 
-.auth-role-tab.active {
+.owner-auth-container .auth-role-tab.active {
   background: #244735;
   color: #ffffff;
   box-shadow: 0 2px 6px rgba(36, 71, 53, 0.18);
 }
 
-.auth-role-desc {
+.owner-auth-container .auth-role-desc {
   color: #647368;
   font-size: 12px;
   line-height: 1.5;
@@ -1024,7 +1024,7 @@
   border-left: 3px solid #315c45;
 }
 
-.auth-demo-pill {
+.owner-auth-container .auth-demo-pill {
   margin-top: 16px;
   padding: 12px 14px;
   background: #edf4ee;
@@ -1040,7 +1040,7 @@
   flex-wrap: wrap;
 }
 
-.auth-demo-pill button {
+.owner-auth-container .auth-demo-pill button {
   padding: 6px 12px;
   background: #315c45;
   color: white;
@@ -1052,7 +1052,7 @@
   transition: 0.2s ease;
 }
 
-.auth-demo-pill button:hover {
+.owner-auth-container .auth-demo-pill button:hover {
   background: #244735;
 }
 

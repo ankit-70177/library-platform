@@ -1,14 +1,13 @@
-import { Navigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { AlertCircle, LogOut } from 'lucide-react'
 
-const customerAppUrl = import.meta.env.VITE_CUSTOMER_APP_URL || 'http://localhost:5173'
-
 export default function ProtectedRoute({ children, requireRole = ['owner', 'admin'] }) {
+  const navigate = useNavigate()
   const token = localStorage.getItem('kitaab-auth-token')
   const rawUser = localStorage.getItem('kitaab-demo-user')
 
   if (!token || !rawUser) {
-    return <Navigate to="/login" replace />
+    return <Navigate to="/owner/login" replace />
   }
 
   let user = null
@@ -17,7 +16,7 @@ export default function ProtectedRoute({ children, requireRole = ['owner', 'admi
   } catch {
     localStorage.removeItem('kitaab-auth-token')
     localStorage.removeItem('kitaab-demo-user')
-    return <Navigate to="/login" replace />
+    return <Navigate to="/owner/login" replace />
   }
 
   const allowedRoles = Array.isArray(requireRole) ? requireRole : [requireRole]
@@ -34,20 +33,20 @@ export default function ProtectedRoute({ children, requireRole = ['owner', 'admi
             You are signed in as <strong>{user.email}</strong> with role <strong>{user.role}</strong>. This portal is reserved for verified library owners and administrators.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <a
-              href={customerAppUrl}
+            <Link
+              to="/"
               className="kd-primary-button"
               style={{ width: '100%' }}
             >
               Go to Customer App
-            </a>
+            </Link>
             <button
               type="button"
               className="kd-secondary-button"
               onClick={() => {
                 localStorage.removeItem('kitaab-auth-token')
                 localStorage.removeItem('kitaab-demo-user')
-                window.location.href = '/login'
+                navigate('/owner/login')
               }}
               style={{ width: '100%' }}
             >

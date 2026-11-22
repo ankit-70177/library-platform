@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   ArrowRight,
@@ -8,9 +8,7 @@ import {
   CheckCircle,
   AlertCircle
 } from 'lucide-react'
-import { loginUser, applyAsOwner } from '../../services/api.js'
-
-const customerAppUrl = import.meta.env.VITE_CUSTOMER_APP_URL || 'http://localhost:5173'
+import { applyAsOwner, loginUser } from '../../services/api.js'
 
 const ROLE_CONFIG = {
   customer: {
@@ -40,6 +38,8 @@ const ROLE_CONFIG = {
 }
 
 export default function Auth({ initialMode = 'login' }) {
+  const navigate = useNavigate()
+  const location = useLocation()
   const [mode, setMode] = useState(initialMode) // 'login' | 'apply'
   const [selectedRole, setSelectedRole] = useState('owner')
 
@@ -53,42 +53,8 @@ export default function Auth({ initialMode = 'login' }) {
   const [phone, setPhone] = useState('')
 
   const [loading, setLoading] = useState(false)
-  const [notice, setNotice] = useState('')
+  const [notice, setNotice] = useState(location.state?.notice || '')
   const [errorNotice, setErrorNotice] = useState('')
-
-  const navigate = useNavigate()
-  const location = useLocation()
-
-  // Cross-port authentication token handoff
-  useEffect(() => {
-    const params = new URLSearchParams(location.search)
-    const authToken = params.get('auth_token')
-    const authUser = params.get('auth_user')
-    const targetSection = params.get('section')
-
-    if (authToken && authUser) {
-      try {
-        const userObj = JSON.parse(authUser)
-        localStorage.setItem('kitaab-auth-token', authToken)
-        localStorage.setItem('kitaab-demo-user', authUser)
-
-        window.history.replaceState({}, document.title, location.pathname)
-
-        if (userObj.role === 'customer') {
-          // Send customer to customer app
-          window.location.href = `${customerAppUrl}/login?auth_token=${encodeURIComponent(
-            authToken
-          )}&auth_user=${encodeURIComponent(authUser)}`
-        } else {
-          navigate(targetSection === 'admin' ? '/dashboard?section=admin' : '/dashboard', {
-            replace: true
-          })
-        }
-      } catch (err) {
-        console.error('Failed to parse incoming authentication handoff', err)
-      }
-    }
-  }, [location.search, navigate])
 
   const handleFillDemo = (roleKey) => {
     const config = ROLE_CONFIG[roleKey]
@@ -133,16 +99,15 @@ export default function Auth({ initialMode = 'login' }) {
         if (actualRole === 'owner') {
           localStorage.setItem('kitaab-auth-token', response.token)
           localStorage.setItem('kitaab-demo-user', JSON.stringify(response.user))
-          navigate('/dashboard')
+          navigate('/owner/dashboard')
         } else if (actualRole === 'admin') {
           localStorage.setItem('kitaab-auth-token', response.token)
           localStorage.setItem('kitaab-demo-user', JSON.stringify(response.user))
-          navigate('/dashboard?section=admin')
+          navigate('/owner/dashboard?section=admin')
         } else if (actualRole === 'customer') {
-          // Cross-port handoff to Customer web on port 5173
-          window.location.href = `${customerAppUrl}/login?auth_token=${encodeURIComponent(
-            response.token
-          )}&auth_user=${encodeURIComponent(JSON.stringify(response.user))}`
+          localStorage.setItem('kitaab-auth-token', response.token)
+          localStorage.setItem('kitaab-demo-user', JSON.stringify(response.user))
+          navigate('/dashboard')
         }
       } else {
         // Apply as owner
@@ -155,11 +120,14 @@ export default function Auth({ initialMode = 'login' }) {
           phone: phone.trim()
         })
 
-        setNotice(
-          response.message ||
-            'Your application has been submitted! Our admin team will review it shortly. Once approved, you can sign in with your email and password.'
-        )
-        setMode('login')
+        navigate('/owner/login', {
+          replace: true,
+          state: {
+            notice:
+              response.message ||
+              'Your application has been submitted! Our admin team will review it shortly. Once approved, you can sign in with your email and password.'
+          }
+        })
       }
     } catch (err) {
       setErrorNotice(err.message || 'Authentication request failed.')
@@ -190,6 +158,7 @@ export default function Auth({ initialMode = 'login' }) {
               setMode('login')
               setErrorNotice('')
               setNotice('')
+              navigate('/owner/login')
             }}
           >
             Sign In
@@ -201,6 +170,7 @@ export default function Auth({ initialMode = 'login' }) {
               setMode('apply')
               setErrorNotice('')
               setNotice('')
+              navigate('/owner/apply')
             }}
           >
             Apply as Owner
@@ -361,12 +331,12 @@ export default function Auth({ initialMode = 'login' }) {
 
         <div style={{ marginTop: 24, fontSize: 13, color: '#69655f' }}>
           Explore study libraries as a student?{' '}
-          <a
-            href={customerAppUrl}
+          <Link
+            to="/"
             style={{ color: '#315c45', fontWeight: 600, textDecoration: 'underline' }}
           >
             Visit Customer Website
-          </a>
+          </Link>
         </div>
       </section>
 
@@ -375,9 +345,9 @@ export default function Auth({ initialMode = 'login' }) {
         <p>
           Connect with dedicated students and researchers looking for quiet, comfortable workspaces. Manage listings, track seat availability, and grow your community.
         </p>
-        <a href={customerAppUrl}>
+        <Link to="/">
           Preview Customer Directory <ArrowRight size={15} />
-        </a>
+        </Link>
       </aside>
     </main>
   )

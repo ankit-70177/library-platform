@@ -1258,10 +1258,7 @@ function Dashboard() {
     )
   }
 
-  const ownerAppUrl = import.meta.env.VITE_OWNER_APP_URL || 'http://localhost:5174'
-
   if (user.role && user.role !== 'customer') {
-    const currentToken = localStorage.getItem('kitaab-auth-token') || ''
     return (
       <main className="customer-page dashboard-page">
         <section className="dashboard-empty" style={{ maxWidth: 640, margin: '40px auto', textAlign: 'center' }}>
@@ -1270,11 +1267,9 @@ function Dashboard() {
             You are signed in as <strong>{user.email}</strong> with role <strong>{user.role}</strong>. Please use the dedicated Owner Portal to manage your library listings and settings.
           </p>
           <div className="dashboard-actions" style={{ justifyContent: 'center' }}>
-            <a
-              href={`${ownerAppUrl}/login?auth_token=${encodeURIComponent(currentToken)}&auth_user=${encodeURIComponent(JSON.stringify(user))}`}
-            >
+            <Link to="/owner/dashboard">
               Go to Owner Portal
-            </a>
+            </Link>
             <button
               type="button"
               className="secondary-action"

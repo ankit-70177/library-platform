@@ -24,6 +24,7 @@ function Navbar() {
         <div className="utility-links">
           <Link className="utility-pill" to="/dashboard"><UserRound size={17} aria-hidden="true" /> My account</Link>
           <Link className="utility-pill" to="/register"><UserPlus size={17} aria-hidden="true" /> Join Kitaab</Link>
+          <Link className="utility-pill" to="/owner/login"><ArrowUpRight size={17} aria-hidden="true" /> Owner Login</Link>
           <Link className="utility-pill" to="/about"><CircleHelp size={17} aria-hidden="true" /> How it works</Link>
         </div>
         <div className="utility-search">
