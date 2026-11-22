@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   ArrowRight,
@@ -10,8 +10,7 @@ import {
 } from 'lucide-react'
 import './Customer.css'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api'
-const ownerAppUrl = import.meta.env.VITE_OWNER_APP_URL || 'http://localhost:5174'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
 
 const ROLE_CONFIG = {
   customer: {
@@ -55,35 +54,6 @@ function Auth({ mode }) {
   const location = useLocation()
 
   const selectedLibrary = new URLSearchParams(location.search).get('library')
-
-  // Check for cross-port token handoff on mount
-  useEffect(() => {
-    const params = new URLSearchParams(location.search)
-    const authToken = params.get('auth_token')
-    const authUser = params.get('auth_user')
-
-    if (authToken && authUser) {
-      try {
-        const userObj = JSON.parse(authUser)
-        localStorage.setItem('kitaab-auth-token', authToken)
-        localStorage.setItem('kitaab-demo-user', authUser)
-
-        // Clear query parameters from URL
-        window.history.replaceState({}, document.title, location.pathname)
-
-        if (userObj.role === 'customer') {
-          navigate('/dashboard', { replace: true })
-        } else {
-          // If non-customer was directed here, send to owner portal
-          window.location.href = `${ownerAppUrl}/login?auth_token=${encodeURIComponent(
-            authToken
-          )}&auth_user=${encodeURIComponent(authUser)}`
-        }
-      } catch (err) {
-        console.error('Failed to parse incoming authentication handoff', err)
-      }
-    }
-  }, [location.pathname, location.search, navigate])
 
   const handleFillDemo = (roleKey) => {
     const config = ROLE_CONFIG[roleKey]
@@ -167,15 +137,13 @@ function Auth({ mode }) {
             : '/dashboard'
         )
       } else if (actualRole === 'owner') {
-        // Redirect to Owner Dashboard on port 5174 with secure handoff
-        window.location.href = `${ownerAppUrl}/login?auth_token=${encodeURIComponent(
-          data.token
-        )}&auth_user=${encodeURIComponent(JSON.stringify(data.user))}`
+        window.localStorage.setItem('kitaab-auth-token', data.token)
+        window.localStorage.setItem('kitaab-demo-user', JSON.stringify(data.user))
+        navigate('/owner/dashboard')
       } else if (actualRole === 'admin') {
-        // Redirect to Admin section in Owner Portal with secure handoff
-        window.location.href = `${ownerAppUrl}/login?auth_token=${encodeURIComponent(
-          data.token
-        )}&auth_user=${encodeURIComponent(JSON.stringify(data.user))}&section=admin`
+        window.localStorage.setItem('kitaab-auth-token', data.token)
+        window.localStorage.setItem('kitaab-demo-user', JSON.stringify(data.user))
+        navigate('/owner/dashboard?section=admin')
       }
     } catch (error) {
       setErrorNotice(error.message || 'Unable to connect to the server')
@@ -351,12 +319,12 @@ function Auth({ mode }) {
         {!isRegister && selectedRole === 'owner' && (
           <p style={{ marginTop: 12, fontSize: 12, color: '#5b5853' }}>
             Want to partner and list your library space?{' '}
-            <a
-              href={`${ownerAppUrl}/apply`}
+            <Link
+              to="/owner/apply"
               style={{ color: '#315c45', fontWeight: 600, textDecoration: 'underline' }}
             >
               Apply as a Library Owner
-            </a>
+            </Link>
           </p>
         )}
       </section>

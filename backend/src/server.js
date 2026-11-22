@@ -7,6 +7,10 @@ const port = Number(process.env.PORT) || 5001
 
 const startServer = async () => {
   try {
+    if (!process.env.JWT_SECRET) {
+      throw new Error('JWT_SECRET is missing. Copy .env.example to .env and set JWT_SECRET.')
+    }
+
     await testDatabaseConnection()
     console.log('PostgreSQL connected successfully')
 

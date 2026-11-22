@@ -115,6 +115,14 @@ export const login = async (req, res) => {
       })
     }
 
+    if (!process.env.JWT_SECRET) {
+      console.error('Login error: JWT_SECRET is not configured')
+      return res.status(500).json({
+        success: false,
+        message: 'Server authentication is not configured. Set JWT_SECRET and restart the backend.',
+      })
+    }
+
     // Generate JWT token
     const token = jwt.sign(
       {

@@ -39,8 +39,6 @@ import {
 
 import './OwnerDashboard.css'
 
-const customerAppUrl = import.meta.env.VITE_CUSTOMER_APP_URL || 'http://localhost:5173'
-
 const AVAILABLE_FACILITIES = [
   'Wi-Fi',
   'Air Conditioning',
@@ -222,7 +220,7 @@ export default function OwnerDashboard() {
   const handleSignOut = () => {
     localStorage.removeItem('kitaab-auth-token')
     localStorage.removeItem('kitaab-demo-user')
-    navigate('/login')
+    navigate('/owner/login')
   }
 
   // Reset form
@@ -658,7 +656,7 @@ export default function OwnerDashboard() {
 
           <div className="kd-sidebar-footer">
             <a
-              href={`${customerAppUrl}/locations`}
+              href="/locations"
               target="_blank"
               rel="noreferrer"
               className="kd-sidebar-link"
@@ -828,7 +826,7 @@ export default function OwnerDashboard() {
                       </div>
 
                       <a
-                        href={`${customerAppUrl}/locations`}
+                        href="/locations"
                         target="_blank"
                         rel="noreferrer"
                         className="kd-quick-action-card"
@@ -1021,7 +1019,7 @@ export default function OwnerDashboard() {
                       </div>
 
                       <a
-                        href={`${customerAppUrl}/locations`}
+                        href="/locations"
                         target="_blank"
                         rel="noreferrer"
                         className="kd-quick-action-card"
@@ -2023,7 +2021,7 @@ export default function OwnerDashboard() {
 
                 <div style={{ marginTop: 24, display: 'flex', gap: 12 }}>
                   <a
-                    href={`${customerAppUrl}/locations`}
+                    href="/locations"
                     target="_blank"
                     rel="noreferrer"
                     className="kd-primary-button"
