@@ -45,6 +45,7 @@ import Events from './pages/public/Events.jsx'
 
 import Auth from './pages/customer/Auth.jsx'
 import Dashboard from './pages/customer/Dashboard.jsx'
+import MembershipPlans from './pages/customer/MembershipPlans.jsx'
 
 function AppLayout() {
   const location = useLocation()
@@ -69,6 +70,7 @@ function AppLayout() {
         <Route path="/register" element={<Auth mode="register" />} />
 
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/membership-plans/:libraryId" element={<MembershipPlans />} />
       </Routes>
 
       {!hideLayout && <Footer />}

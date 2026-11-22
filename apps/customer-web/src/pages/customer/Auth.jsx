@@ -124,11 +124,14 @@ function Auth({ mode }) {
       }
 
       if (isRegister) {
-        navigate('/login', {
-          state: {
-            notice: 'Account created successfully! Please sign in.'
+        navigate(
+          selectedLibrary ? `/login?library=${selectedLibrary}` : '/login',
+          {
+            state: {
+              notice: 'Account created successfully! Please sign in.'
+            }
           }
-        })
+        )
         return
       }
 
@@ -158,7 +161,11 @@ function Auth({ mode }) {
             libraryId: selectedLibrary
           })
         )
-        navigate('/dashboard')
+        navigate(
+          selectedLibrary
+            ? `/membership-plans/${selectedLibrary}`
+            : '/dashboard'
+        )
       } else if (actualRole === 'owner') {
         // Redirect to Owner Dashboard on port 5174 with secure handoff
         window.location.href = `${ownerAppUrl}/login?auth_token=${encodeURIComponent(

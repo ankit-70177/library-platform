@@ -1,0 +1,138 @@
+.membership-page {
+  min-height: 75vh;
+  padding: 55px max(22px, calc((100vw - 1100px) / 2)) 90px;
+  background: #fbf9f4;
+  font-family: 'Inter', Arial, sans-serif;
+  color: #20251f;
+}
+
+.membership-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #315c45;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.membership-heading {
+  text-align: center;
+  margin: 55px auto 40px;
+}
+
+.membership-eyebrow {
+  color: #54765e;
+  font-size: 12px;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+
+.membership-heading h1 {
+  font: 500 clamp(32px, 5vw, 48px)/1.15 'Lora', Georgia, serif;
+  margin: 12px 0;
+}
+
+.membership-heading > p:last-child {
+  color: #69655f;
+  font-size: 14px;
+}
+
+.membership-plans {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 22px;
+}
+
+.membership-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 28px;
+  padding: 28px;
+  background: white;
+  border: 1px solid #e4dfd6;
+  border-radius: 8px;
+}
+
+.membership-card h2 {
+  font: 500 24px 'Lora', Georgia, serif;
+  margin: 0 0 8px;
+}
+
+.membership-duration,
+.membership-description {
+  color: #777168;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.membership-price {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 22px 0 8px;
+}
+
+.membership-buy {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  background: #244735;
+  color: white;
+  border: 0;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.membership-buy:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.membership-success,
+.membership-error {
+  padding: 16px;
+  margin: 20px 0;
+  border-radius: 6px;
+  line-height: 1.6;
+}
+
+.membership-success {
+  display: flex;
+  gap: 12px;
+  background: #edf5ed;
+  color: #245b35;
+}
+
+.membership-success p {
+  margin: 5px 0;
+}
+
+.membership-success a {
+  color: #245b35;
+  font-weight: 600;
+}
+
+.membership-error {
+  background: #fff0ed;
+  color: #a52b20;
+}
+
+.membership-demo-note {
+  margin-top: 25px;
+  text-align: center;
+  color: #777168;
+  font-size: 12px;
+}
+
+@media (max-width: 600px) {
+  .membership-page {
+    padding-top: 35px;
+  }
+
+  .membership-heading {
+    margin-top: 40px;
+  }
+}
