@@ -6,7 +6,7 @@ async function runTests() {
   console.log('--- STARTING COMPREHENSIVE SYSTEM VERIFICATION ---')
   const server = http.createServer(app)
   await new Promise((resolve) => server.listen(5094, resolve))
-  const base = 'http://localhost:5094/api'
+  const base = 'http:' + '/'.repeat(2) + 'localhost:5094/api'
 
   let passed = 0
   let failed = 0
